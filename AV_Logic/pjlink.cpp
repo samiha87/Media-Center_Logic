@@ -77,6 +77,7 @@ void PJLink::setInput(Projector_Channels input) {
 }
 
 void PJLink::requestStatus() {
+    qDebug() << "PJLink requestStatus";
     switch (requestPoll) {
         case 0:
     case 1:
@@ -131,8 +132,8 @@ void PJLink::setPassword(QString pass) {
     password = pass;
 }
 
-void PJLink::setPort(int port) {
-    port = port;
+void PJLink::setPort(int port_) {
+    port = port_;
 }
 void PJLink::response(QByteArray msg) {
     qDebug() << "PJLINK::response()" << msg;
@@ -145,8 +146,9 @@ void PJLink::response(QByteArray msg) {
         random_number.append(password.toUtf8());
         qDebug() << "PJLink::response() Random number is" << random_number;
         QByteArray hashedMessage = md5hash(random_number);
-        hashedMessage.append(pendingCommand);
+        hashedMessage.append(pendingCommand.toUtf8());
         hashedMessage.append('\r'); // \r is end byte, required for projector to understand when message ends
+        qDebug() << "PJLink::response() send hashed message";
         sock->send(hashedMessage);
         pendingCommand.clear();
     } else if(msg.contains("ERR")) {

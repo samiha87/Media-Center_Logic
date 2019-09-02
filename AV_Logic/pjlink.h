@@ -64,7 +64,7 @@ public:
     void setInput(Projector_Channels input);
     void setIpAddress(QString ip);
     void setPassword(QString pass);
-    void setPort(int port);
+    void setPort(int port_);
 
 signals:
     void projectorStatus(QByteArray msg);
@@ -82,7 +82,7 @@ private:
     QTimer *timer;
 
     bool connected;
-    int port;
+    qint16 port;
     TCPSocket *sock;
 
     void sendCommand(QString cmd);

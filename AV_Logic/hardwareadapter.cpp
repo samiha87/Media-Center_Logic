@@ -1,9 +1,13 @@
 #include "hardwareadapter.h"
+#include <QProcess>
 #include <QDebug>
+#include <QCoreApplication>
 
 HardwareAdapter::HardwareAdapter(QObject *parent) : QObject(parent)
 {
     tcp = new TCPSocket(this);
+    startHardwareLayer();   //Start python layer
+    process = nullptr;
 }
 
 void HardwareAdapter::msgFromHardware(QByteArray msg) {
@@ -26,4 +30,23 @@ void HardwareAdapter::msgFromHardware(QByteArray msg) {
 void HardwareAdapter::hardwareTx(QByteArray msg) {
     qDebug() << msg;
     tcp->send(msg);
+}
+
+// Start a python based hardware layer
+void HardwareAdapter::startHardwareLayer() {
+    QString path = "/opt/hardwarelayer/";
+    qDebug() << "HardwareAdapter::startHardwareLayer() " << path;
+    QString  command("python");
+    QStringList params = QStringList() << "HardwareHandler.py";
+    process = new QProcess(this);
+    qDebug() << "HardwareAdapter::starting QProcess";
+    process->startDetached(command, params, path, nullptr);
+    process->waitForReadyRead(3000);
+    qDebug() << "HardwareAdapter::startHardwareLayer() " << process->readAll();
+}
+
+void HardwareAdapter::stopHardwareLayer() {
+    if(process == nullptr) return;
+    process->close();
+    process->deleteLater();
 }

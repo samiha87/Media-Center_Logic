@@ -2,6 +2,8 @@
 #define HARDWAREADAPTER_H
 
 #include <QObject>
+#include <QProcess>
+
 #include "tcpsocket.h"
 
 class HardwareAdapter : public QObject
@@ -20,6 +22,10 @@ public slots:
 
 private:
     TCPSocket *tcp;
+    QProcess *process;
+    // Start python based hardware layer
+    void startHardwareLayer();
+    void stopHardwareLayer();
 };
 
 #endif // HARDWAREADAPTER_H

@@ -10,15 +10,15 @@ class TCPSocket : public QObject
     Q_OBJECT
 public:
     explicit TCPSocket(QObject *parent = 0);
-
+    // Connect to desired address and port
+    void connect(QString address, quint16 port);
     // Send message to the socket
     void send(QByteArray array);
     // Close socket connection
     void close();
 
 public slots:
-    // Connect to desired address and port
-    void connect(QString address, quint16 port);
+    void reConnect();
     void connected();
     void disconnected();
     void bytesWritten(qint64 bytes);
