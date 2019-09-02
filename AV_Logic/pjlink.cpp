@@ -1,4 +1,5 @@
 #include "pjlink.h"
+
 #include <qcryptographichash.h>
 // https://pjlink.jbmia.or.jp/english/data/5-1_PJLink_eng_20131210.pdf
 
@@ -6,7 +7,7 @@
 PJLink::PJLink(QObject *parent) : QObject(parent)
 {
     port = PJLINK_PORT;
-    sock = new tcpsocket(this);
+    sock = new TCPSocket();
     QObject::connect(sock, SIGNAL(response(QByteArray)), this, SLOT(response(QByteArray)));
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(requestStatus()));

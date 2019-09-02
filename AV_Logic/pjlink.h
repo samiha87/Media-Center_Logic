@@ -9,6 +9,7 @@
 #include <QTimer>
 
 #include "tcpsocket.h"
+
 #define PJLINK_PORT 4352
 #define PJLINK_CLASS '1'
 
@@ -82,7 +83,7 @@ private:
 
     bool connected;
     int port;
-    tcpsocket *sock;
+    TCPSocket *sock;
 
     void sendCommand(QString cmd);
 
