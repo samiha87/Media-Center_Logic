@@ -20,6 +20,13 @@ $ sudo apt-get install libts-dev libxcb-xinerama0-dev
 $ sudo apt-get install libxcb-xinerama0
 $ sudo apt-get install gstreamer1.0-omx libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 ```
+
+! The toolset from raspberry site contains quite old tools for compilers. After updating the compiler for arm from https://releases.linaro.org/components/toolchain/binaries/6.1-2016.08/arm-linux-gnueabihf/ building of the program succeeded.
+
+To build use following command line 
+cmake -DCMAKE_SKIP_BUILD_RPATH=FALSE -DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE -DCMAKE_INSTALL_RPATH="/home/sami/raspi/sysroot/lib/arm-linux-gnueabihf;/home/sami/raspi/sysroot/usr/lib/arm-linux-gnueabihf;" -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE ../
+
+
 ## Cross-compiling with Qt memo, Tested with Raspberry PI 1. Cross-compile tutorial from wiki.qt.io
 ### Host side
 !Old verison of raspberry and Qt used due confict with compiler libraries
