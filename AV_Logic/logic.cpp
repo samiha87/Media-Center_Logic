@@ -14,3 +14,12 @@ Logic::Logic(QObject *parent) : QObject(parent)
     QObject::connect(pjlink, SIGNAL(projectorStatus(QByteArray)), this, SLOT(displayMessageParser(QByteArray)));
     QObject::connect(this, SIGNAL(hardwareTx(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
 }
+
+// Slots
+void Logic::displayMessageParser(QByteArray msg) {
+
+}
+
+void Logic::messageParser(QByteArray msg) {
+
+}

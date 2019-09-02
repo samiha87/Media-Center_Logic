@@ -13,8 +13,10 @@ public:
     explicit Logic(QObject *parent = nullptr);
 
 signals:
-
+    void hardwareTx(QByteArray msg);
 public slots:
+    void displayMessageParser(QByteArray msg);
+    void messageParser(QByteArray msg);
 private:
     HardwareAdapter *hwAdapter;
     PJLink *pjlink;

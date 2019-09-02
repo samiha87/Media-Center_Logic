@@ -3,7 +3,7 @@
 
 HardwareAdapter::HardwareAdapter(QObject *parent) : QObject(parent)
 {
-
+    tcp = new TCPSocket(this);
 }
 
 void HardwareAdapter::msgFromHardware(QByteArray msg) {
@@ -21,4 +21,9 @@ void HardwareAdapter::msgFromHardware(QByteArray msg) {
         msg.chop(1);    // Remove end byte * from array
         emit bleMessageRx(msg);
     }
+}
+
+void HardwareAdapter::hardwareTx(QByteArray msg) {
+    qDebug() << msg;
+    tcp->send(msg);
 }

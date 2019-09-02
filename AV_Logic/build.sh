@@ -1,0 +1,1 @@
+cmake  -DCMAKE_SKIP_BUILD_RPATH=FALSE -DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE -DCMAKE_INSTALL_RPATH="/home/sami/raspi/sysroot/lib/arm-linux-gnueabihf;/home/sami/raspi/sysroot/usr/lib/arm-linux-gnueabihf" -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE ../
