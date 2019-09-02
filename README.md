@@ -1,6 +1,25 @@
 # Cartracker_AVControl
 Raspberry Pi running with Qt, controls AV systems
-
+1.Download OSMC for Raspberry https://osmc.tv/download/
+2.Copy the image to SD-Card with D or Balena Etcher.
+3.Put the SD-Card to raspberry and start OSMC
+4. Once OSMC has started properly, connect with ssh to pi
+  - User: osmc, password: osmc
+5. Open raspbery package manager sources
+- sudo nano /etc/apt/sources.list
+6. Add following
+- deb-src http://raspbian.raspberrypi.org/raspbian/ stretch main contrib non-free rpi
+7. Update sources
+- sudo apt update
+8. Install following packages
+```shell
+$ sudo apt-get build-deb qt4-x11
+$ sudo apt-get build-deb libqt5gui5
+$ sudo apt-get install libudev-dev libinput-dev 
+$ sudo apt-get install libts-dev libxcb-xinerama0-dev
+$ sudo apt-get install libxcb-xinerama0
+$ sudo apt-get install gstreamer1.0-omx libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+```
 ## Cross-compiling with Qt memo, Tested with Raspberry PI 1. Cross-compile tutorial from wiki.qt.io
 ### Host side
 !Old verison of raspberry and Qt used due confict with compiler libraries

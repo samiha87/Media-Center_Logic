@@ -30,7 +30,6 @@ def BluetoothServer(device, baud, icom_in, icom_out):
 			if thread_data:
 				print("Data from queue")
 				print(thread_data)
-				#bluetooth.write("hello")
 				bluetooth.write(thread_data)
 		except:
 			thread_data = None
