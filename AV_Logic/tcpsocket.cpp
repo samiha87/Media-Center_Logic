@@ -22,12 +22,10 @@ void TCPSocket::connect(QString address, quint16 port) {
 
     qDebug() << "connecting...";
 
-    // this is not blocking call
-    socket->connectToHost(address, port);
 
-    // we need to wait...
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
+        socket->connectToHost(address, port);
     }
 }
 

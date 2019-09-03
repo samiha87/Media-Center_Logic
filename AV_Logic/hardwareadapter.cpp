@@ -29,6 +29,7 @@ void HardwareAdapter::msgFromHardware(QByteArray msg) {
         qDebug() << "Message: " << msg;
         msg = msg.remove(0, 4); // Remove #BLE from message
         msg.chop(1);    // Remove end byte * from array
+        qDebug() << "HardwareAdapter::msgFromHardware() sending " << msg;
         emit bleMessageRx(msg);
     }
 }

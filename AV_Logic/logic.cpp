@@ -38,14 +38,14 @@ void Logic::displayMessageParser(QByteArray msg) {
 void Logic::messageParser(QByteArray msg) {
     qDebug() << "Logic::messageParser() " << msg;
     if(msg.contains("Proj")) {
-        msg = msg.remove(0,5);// Remove #Proj
-        msg.chop('*');  // Remove end byte
+        msg = msg.remove(0,4);// Remove #Proj
         displayParser(msg);    // Process display message and act accordingly
     }
 }
 
 void Logic::displayParser(QByteArray msg) {
     // Check if we have power command
+    qDebug() << "Logic::displayParser() " << msg;
     if(msg.contains("Pwr")) {
         if(msg.contains("On"))  {
             qDebug() << "Logic::displayParser() Truning projector on";
