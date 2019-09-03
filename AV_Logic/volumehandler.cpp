@@ -3,6 +3,13 @@
 VolumeHandler::VolumeHandler(QObject *parent) : QObject(parent)
 {
     currentDevice = eVolumeRaspberryHDMI;
+    osmc.setAddress("10.42.0.232", 80);
+    osmc.setVolumeUp();
+    osmc.setVolumeDown();
+}
+
+void VolumeHandler::setDefaults() {
+    osmc.setVolume(50);
 }
 
 void VolumeHandler::setVolumeUp() {
@@ -41,16 +48,16 @@ void VolumeHandler::setVolumeDown() {
     }
 }
 
-void VolumeHandler::setVolume(QByteArray volLvl) {
+void VolumeHandler::setVolume(int volLvl) {
     QByteArray msg;
     switch (currentDevice) {
         case eVolumeRaspberryHDMI:
             // Form correct message
-            msg = "#HW,Vol,Set=" + volLvl + "*" ;
+            msg = "#HW,Vol,Set=" + QByteArray::number(volLvl) + "*" ;
             emit volumeChanged(msg);
         break;
     case eVolumeRaspberryHeadphones:
-         msg = "#HW,HP,Vol,Set=" + volLvl + "*" ;
+         msg = "#HW,HP,Vol,Set=" + QByteArray::number(volLvl) + "*" ;
          emit volumeChanged(msg);
         // Do nothing
         break;
@@ -60,6 +67,7 @@ void VolumeHandler::setVolume(QByteArray volLvl) {
 }
 
 void VolumeHandler::setVolumeMute(bool choice) {
+    Q_UNUSED(choice);
     QByteArray msg;
     switch (currentDevice) {
         case eVolumeRaspberryHDMI:

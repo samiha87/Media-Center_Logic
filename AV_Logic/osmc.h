@@ -10,6 +10,7 @@ class OSMC : public QObject
     Q_OBJECT
 public:
     explicit OSMC(QObject *parent = nullptr);
+    void setVolume(int vol);
     void setVolumeUp();
     void setVolumeDown();
     void sendCommand(QJsonDocument *doc);
@@ -21,6 +22,7 @@ public slots:
 private:
     QString instanceAddress;
     qint16 instancePort;
+    int currentVolume;
 };
 
 #endif // OSMC_H
