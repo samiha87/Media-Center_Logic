@@ -3,6 +3,7 @@ CMake compiles and building software succeeeds. When running software on RPI imm
 When building with Qt Compiler with same arm compiler, software runs without issues.
 TODO is the issue with linking libraries?
 
+Cmake compiles and succesfully builds but when running it on Raspberry -> segmentation fault. TODO check library paths
 # Cartracker_AVControl
 Raspberry Pi running with Qt, controls AV systems
 1.Download OSMC for Raspberry https://osmc.tv/download/

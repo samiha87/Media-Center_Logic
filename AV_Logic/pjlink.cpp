@@ -109,12 +109,12 @@ void PJLink::requestInput() {
 }
 
 void PJLink::requestAVMute() {
-
+    // Request AV mute status
     sendCommand("AVMT ?");
 }
 
 void PJLink::requestLamp() {
-
+    // Request lamp hours
     sendCommand("LAMP ?");
 }
 
