@@ -20,6 +20,8 @@ public slots:
 private:
     HardwareAdapter *hwAdapter;
     PJLink *pjlink;
+
+    QByteArray makeMessage(QString input);
 };
 
 #endif // LOGIC_H

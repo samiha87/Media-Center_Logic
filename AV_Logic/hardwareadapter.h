@@ -11,6 +11,7 @@ class HardwareAdapter : public QObject
     Q_OBJECT
 public:
     explicit HardwareAdapter(QObject *parent = nullptr);
+    ~HardwareAdapter();
 
 signals:
     void bleMessageRx(QByteArray msg);
@@ -25,6 +26,7 @@ private:
     QProcess *process;
     // Start python based hardware layer
     void startHardwareLayer();
+    // Uses bash to kill runiing python
     void stopHardwareLayer();
 };
 

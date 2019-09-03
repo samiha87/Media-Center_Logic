@@ -20,9 +20,17 @@ Logic::Logic(QObject *parent) : QObject(parent)
     qDebug() << "Logic:: Starting()";
 }
 
+QByteArray Logic::makeMessage(QString input) {
+    QByteArray result;
+    if(input.contains("Proj")) {
+
+    }
+    return result;
+}
 // Slots
 void Logic::displayMessageParser(QByteArray msg) {
     qDebug() << "Logic::displayMessageParser " << msg;
+
 
 }
 

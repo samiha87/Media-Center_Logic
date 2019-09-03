@@ -10,6 +10,10 @@ HardwareAdapter::HardwareAdapter(QObject *parent) : QObject(parent)
     process = nullptr;
 }
 
+HardwareAdapter::~HardwareAdapter() {
+    stopHardwareLayer();
+}
+
 void HardwareAdapter::msgFromHardware(QByteArray msg) {
     // Parse mesage
     if (!msg.contains('#') || !msg.contains('*')) {
@@ -41,12 +45,25 @@ void HardwareAdapter::startHardwareLayer() {
     process = new QProcess(this);
     qDebug() << "HardwareAdapter::starting QProcess";
     process->startDetached(command, params, path, nullptr);
-    process->waitForReadyRead(3000);
+    process->waitForReadyRead(10000);
     qDebug() << "HardwareAdapter::startHardwareLayer() " << process->readAll();
+    // Connect to hardware layer
+    process->close();
+    process->deleteLater();
+
 }
 
 void HardwareAdapter::stopHardwareLayer() {
-    if(process == nullptr) return;
+    QString path = "/opt/hardwarelayer/";
+    qDebug() << "HardwareAdapter::stopHardwarelayer() ";
+    QString  command("sh");
+    QStringList params = QStringList() << "kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')";
+    process = new QProcess(this);
+    qDebug() << "HardwareAdapter::starting QProcess";
+    process->startDetached(command, params, path, nullptr);
+    process->waitForFinished();
+    qDebug() << "HardwareAdapter::startHardwareLayer() " << process->readAll();
+    // Connect to hardware layer
     process->close();
     process->deleteLater();
 }

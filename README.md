@@ -24,6 +24,10 @@ $ sudo apt-get install libudev-dev libinput-dev
 $ sudo apt-get install libts-dev libxcb-xinerama0-dev
 $ sudo apt-get install libxcb-xinerama0
 $ sudo apt-get install gstreamer1.0-omx libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+$ sudo apt-get install python-pip
+$ pip install pyserial
+$ pip install alsaaudio
+$ sudo apt-get install python-alsaaudio
 ```
 
 ! The toolset from raspberry site contains quite old tools for compilers. After updating the compiler for arm from https://releases.linaro.org/components/toolchain/binaries/6.1-2016.08/arm-linux-gnueabihf/ building of the program succeeded.
