@@ -41,6 +41,12 @@ void Logic::messageParser(QByteArray msg) {
         msg = msg.remove(0,4);// Remove #Proj
         displayParser(msg);    // Process display message and act accordingly
     }
+
+    if(msg.contains("Vol")) {
+        qDebug() << "Logic::messageParser() Volume adjustment";
+        msg = msg.remove(0, 3); // remove vol
+        volumeParser(msg);
+    }
 }
 
 void Logic::displayParser(QByteArray msg) {

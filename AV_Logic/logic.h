@@ -23,7 +23,10 @@ private:
     HardwareAdapter *hwAdapter;
     PJLink *pjlink;
     QByteArray makeMessage(QString input);
+    // Parses messages pointed for display. Contains display logic.
     void displayParser(QByteArray msg);
+    // Parses messages pointed for volume. Contains volume logic.
+    void volumeParser(QByteArray msg);
 };
 
 #endif // LOGIC_H
