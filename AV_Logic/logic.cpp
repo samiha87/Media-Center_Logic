@@ -6,6 +6,7 @@ Logic::Logic(QObject *parent) : QObject(parent)
 {
     pjlink = new PJLink(this);
     hwAdapter = new HardwareAdapter(this);
+    volHandler = new VolumeHandler(this);
 
     pjlink->setPort(4352); // Default port for PJLink
     pjlink->setIpAddress("10.42.0.100");
@@ -14,17 +15,19 @@ Logic::Logic(QObject *parent) : QObject(parent)
     QObject::connect(hwAdapter, SIGNAL(bleMessageRx(QByteArray)), this, SLOT(messageParser(QByteArray)));
     // Connect projector driver to this class and parse message.
     QObject::connect(pjlink, SIGNAL(projectorStatus(QByteArray)), this, SLOT(displayMessageParser(QByteArray)));
-    // Connect outgoing dat
+    // Connect outgoing data
     QObject::connect(this, SIGNAL(hardwareTx(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
+    // Connect Volume Handler to hardware tx
+    QObject::connect(volHandler, SIGNAL(volumeChanged(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
     // Connect to projector
     qDebug() << "Logic:: Starting()";
 }
 
-QByteArray Logic::makeMessage(QString input) {
-    QByteArray result;
+QByteArray Logic::makeMessage(QByteArray input) {
+    QByteArray result = "";
     if(input.contains("Proj")) {
         qDebug() << "Logic::makeMessage() Message from projector";
-
+        result +="#r," + input + "*";
     }
     return result;
 }
@@ -59,6 +62,18 @@ void Logic::displayParser(QByteArray msg) {
         } else if(msg.contains("Off")) {
             qDebug() << "Logic::displayParser() Turn projector off";
             pjlink->setPower(false);
+        }
+    }
+}
+
+void Logic::volumeParser(QByteArray msg) {
+    if(msg.contains("Vol")) {
+        if(msg.contains("Up"))  {
+            qDebug() << "Logic::displayParser() Truning projector on";
+            volHandler->setVolumeUp();
+        } else if(msg.contains("Down")) {
+            qDebug() << "Logic::displayParser() Turn projector off";
+            volHandler->setVolumeDown();
         }
     }
 }

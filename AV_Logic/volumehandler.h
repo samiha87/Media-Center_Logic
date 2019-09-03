@@ -16,11 +16,12 @@ public:
     explicit VolumeHandler(QObject *parent = nullptr);
     void setVolumeUp();
     void setVolumeDown();
-    void setVolume();
-    void setVolumeMute();
+    void setVolume(QByteArray volLvl);
+    void setVolumeMute(bool choice);
 
     void setVolumeControl(eVolumeControlDevices dev);    // Default Raspberry Pi
 signals:
+    void volumeChanged(QByteArray msg);
 private:
     eVolumeControlDevices currentDevice;    // Default Raspberry Pi
 

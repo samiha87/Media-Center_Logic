@@ -5,6 +5,7 @@
 
 #include "pjlink.h"
 #include "hardwareadapter.h"
+#include "volumehandler.h"
 
 class Logic : public QObject
 {
@@ -22,7 +23,8 @@ public slots:
 private:
     HardwareAdapter *hwAdapter;
     PJLink *pjlink;
-    QByteArray makeMessage(QString input);
+    VolumeHandler *volHandler;
+    QByteArray makeMessage(QByteArray input);
     // Parses messages pointed for display. Contains display logic.
     void displayParser(QByteArray msg);
     // Parses messages pointed for volume. Contains volume logic.
