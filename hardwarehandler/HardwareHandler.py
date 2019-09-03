@@ -41,7 +41,6 @@ def BluetoothServer(device, baud, icom_in, icom_out):
 			received_data = bluetooth.read(data_left)
 			if "#" in received_data:
 				ble_buffer = ""
-				ble_buffer = received_data
 				start_byte = True
 			if start_byte:
 				ble_buffer += received_data

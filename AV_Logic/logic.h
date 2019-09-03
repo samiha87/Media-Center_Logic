@@ -14,14 +14,16 @@ public:
 
 signals:
     void hardwareTx(QByteArray msg);
+
 public slots:
     void displayMessageParser(QByteArray msg);
     void messageParser(QByteArray msg);
+
 private:
     HardwareAdapter *hwAdapter;
     PJLink *pjlink;
-
     QByteArray makeMessage(QString input);
+    void displayParser(QByteArray msg);
 };
 
 #endif // LOGIC_H

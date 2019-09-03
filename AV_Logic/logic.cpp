@@ -23,6 +23,7 @@ Logic::Logic(QObject *parent) : QObject(parent)
 QByteArray Logic::makeMessage(QString input) {
     QByteArray result;
     if(input.contains("Proj")) {
+        qDebug() << "Logic::makeMessage() Message from projector";
 
     }
     return result;
@@ -30,10 +31,28 @@ QByteArray Logic::makeMessage(QString input) {
 // Slots
 void Logic::displayMessageParser(QByteArray msg) {
     qDebug() << "Logic::displayMessageParser " << msg;
-
-
+    QByteArray builtMsg = makeMessage(msg); // Turn message into correct format for hardware layer
+    emit hardwareTx(builtMsg);
 }
 
 void Logic::messageParser(QByteArray msg) {
     qDebug() << "Logic::messageParser() " << msg;
+    if(msg.contains("Proj")) {
+        msg = msg.remove(0,5);// Remove #Proj
+        msg.chop('*');  // Remove end byte
+        displayParser(msg);    // Process display message and act accordingly
+    }
+}
+
+void Logic::displayParser(QByteArray msg) {
+    // Check if we have power command
+    if(msg.contains("Pwr")) {
+        if(msg.contains("On"))  {
+            qDebug() << "Logic::displayParser() Truning projector on";
+            pjlink->setPower(true);
+        } else if(msg.contains("Off")) {
+            qDebug() << "Logic::displayParser() Turn projector off";
+            pjlink->setPower(false);
+        }
+    }
 }

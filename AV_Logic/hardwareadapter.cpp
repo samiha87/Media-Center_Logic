@@ -8,6 +8,8 @@ HardwareAdapter::HardwareAdapter(QObject *parent) : QObject(parent)
     tcp = new TCPSocket(this);
     startHardwareLayer();   //Start python layer
     process = nullptr;
+    // Connect socket with harware reader slot
+    QObject::connect(tcp, SIGNAL(response(QByteArray)), this, SLOT(msgFromHardware(QByteArray)));
 }
 
 HardwareAdapter::~HardwareAdapter() {
@@ -38,7 +40,7 @@ void HardwareAdapter::hardwareTx(QByteArray msg) {
 
 // Start a python based hardware layer
 void HardwareAdapter::startHardwareLayer() {
-    QString path = "/opt/hardwarelayer/";
+  /*  QString path = "/opt/hardwarelayer/";
     qDebug() << "HardwareAdapter::startHardwareLayer() " << path;
     QString  command("python");
     QStringList params = QStringList() << "HardwareHandler.py";
@@ -49,8 +51,8 @@ void HardwareAdapter::startHardwareLayer() {
     qDebug() << "HardwareAdapter::startHardwareLayer() " << process->readAll();
     // Connect to hardware layer
     process->close();
-    process->deleteLater();
-
+    process->deleteLater(); */
+    tcp->connect("localhost", 10000);
 }
 
 void HardwareAdapter::stopHardwareLayer() {
