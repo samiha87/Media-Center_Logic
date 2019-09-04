@@ -25,7 +25,7 @@ public:
     void setVolume(int volLvl);
     // Set volume mute
     void setVolumeMute(bool choice);
-
+    // Sest which type of device is being controlled
     void setVolumeControl(eVolumeControlDevices dev);    // Default Raspberry Pi
 signals:
     void volumeChanged(QByteArray msg);

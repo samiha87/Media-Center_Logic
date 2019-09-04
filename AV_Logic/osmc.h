@@ -10,10 +10,13 @@ class OSMC : public QObject
     Q_OBJECT
 public:
     explicit OSMC(QObject *parent = nullptr);
+    // Sets volume to wanted value
     void setVolume(int vol);
+    // Increases volume with one step
     void setVolumeUp();
+    // Deacreases volume with one step
     void setVolumeDown();
-    void sendCommand(QJsonDocument *doc);
+    // Set OSMC address and port
     void setAddress(QString address, qint16 port);
 signals:
 
@@ -22,8 +25,11 @@ public slots:
 private:
     QString instanceAddress;
     qint16 instancePort;
+    // Stores OSMC current volume
     int currentVolume;
     QNetworkAccessManager *networkManager;
+    // Send http post
+    void sendCommand(QJsonDocument *doc);
 
 };
 
