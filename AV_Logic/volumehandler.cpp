@@ -4,8 +4,7 @@ VolumeHandler::VolumeHandler(QObject *parent) : QObject(parent)
 {
     currentDevice = eVolumeRaspberryHDMI;
     osmc.setAddress("10.42.0.232", 80);
-    osmc.setVolumeUp();
-    osmc.setVolumeDown();
+    setDefaults();
 }
 
 void VolumeHandler::setDefaults() {
@@ -17,8 +16,7 @@ void VolumeHandler::setVolumeUp() {
     switch (currentDevice) {
         case eVolumeRaspberryHDMI:
             // Form correct message
-            msg = "#HW,Vol,Up*";
-            emit volumeChanged(msg);
+            osmc.setVolumeUp();
         break;
     case eVolumeRaspberryHeadphones:
          msg = "#HW,HP,Vol,Up*";
@@ -35,8 +33,7 @@ void VolumeHandler::setVolumeDown() {
     switch (currentDevice) {
         case eVolumeRaspberryHDMI:
             // Form correct message
-            msg = "#HW,Vol,Down*";
-            emit volumeChanged(msg);
+            osmc.setVolumeDown();
         break;
     case eVolumeRaspberryHeadphones:
          msg = "#HW,HP,Vol,Down*";
@@ -53,8 +50,7 @@ void VolumeHandler::setVolume(int volLvl) {
     switch (currentDevice) {
         case eVolumeRaspberryHDMI:
             // Form correct message
-            msg = "#HW,Vol,Set=" + QByteArray::number(volLvl) + "*" ;
-            emit volumeChanged(msg);
+            osmc.setVolume(volLvl);
         break;
     case eVolumeRaspberryHeadphones:
          msg = "#HW,HP,Vol,Set=" + QByteArray::number(volLvl) + "*" ;

@@ -23,6 +23,8 @@ private:
     QString instanceAddress;
     qint16 instancePort;
     int currentVolume;
+    QNetworkAccessManager *networkManager;
+
 };
 
 #endif // OSMC_H
