@@ -1,7 +1,9 @@
 #ifndef VOLUMEHANDLER_H
 #define VOLUMEHANDLER_H
-
+// Common includes
 #include <QObject>
+#include <QTimer>
+// Project includes
 #include "osmc.h"
 
 class VolumeHandler : public QObject
@@ -34,8 +36,11 @@ signals:
 private:
     eVolumeControlDevices currentDevice;    // Default Raspberry Pi
     OSMC osmc;
-
+    QTimer *timer;
     bool volMute;
+private slots:
+    //
+    void updateStatus();
 
 public slots:
 };

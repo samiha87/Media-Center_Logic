@@ -2,9 +2,12 @@
 
 VolumeHandler::VolumeHandler(QObject *parent) : QObject(parent)
 {
+    timer = new QTimer(this);
     currentDevice = eVolumeRaspberryHDMI;
     osmc.setAddress("10.42.0.232", 80);
     setDefaults();
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(updateStatus()));
+    timer->start(1000); // Update volume status to android app, every 5s
 }
 
 void VolumeHandler::setDefaults() {
@@ -105,7 +108,17 @@ void VolumeHandler::toggleVolumeMute() {
     }
 }
 
-
 void VolumeHandler::setVolumeControl(eVolumeControlDevices dev) {
     currentDevice = dev;
+}
+
+void VolumeHandler::updateStatus() {
+    // Generate string from current status
+    QByteArray array;
+    array.append("#r,Audio,Vol,");  // Start byte, Reply message, Device type, Volume
+    array.append("Level=" + QByteArray::number(osmc.getVolume()));
+    if(volMute)array.append(",Mute=On");
+    else array.append(",Mute=Off");
+    array.append("*");  // End byte
+    emit volumeChanged(array);
 }

@@ -20,6 +20,8 @@ public:
     void setVolumeMute(bool choice);
     // Set OSMC address and port
     void setAddress(QString address, qint16 port);
+    // Returns OSMC current volume
+    int getVolume();
 signals:
 
 public slots:

@@ -30,7 +30,8 @@ void OSMC::setVolume(int vol) {
 }
 
 void OSMC::setVolumeUp() {
-    if(currentVolume++ > 99) currentVolume = 100;   // Vol max is 0, OSMC
+    currentVolume = currentVolume + 10;
+    if(currentVolume > 99) currentVolume = 100;   // Vol max is 0, OSMC
     QJsonObject params;
     QJsonObject jObject;
     QJsonDocument jDocument;
@@ -46,7 +47,8 @@ void OSMC::setVolumeUp() {
 }
 
 void OSMC::setVolumeDown() {
-    if(currentVolume-- < 1) currentVolume = 0;  // Vol min is 0, OSMC
+    currentVolume = currentVolume - 10;
+    if(currentVolume < 1) currentVolume = 0;  // Vol min is 0, OSMC
     QJsonObject params;
     QJsonObject jObject;
     QJsonDocument jDocument;
@@ -91,6 +93,10 @@ void OSMC::sendCommand(QJsonDocument *doc) {
 void OSMC::setAddress(QString address, qint16 port) {
     instanceAddress = address;
     instancePort = port;
+}
+
+int OSMC::getVolume() {
+    return currentVolume;
 }
 
 void OSMC::reply(QNetworkReply *rep)

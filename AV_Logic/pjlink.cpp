@@ -11,7 +11,7 @@ PJLink::PJLink(QObject *parent) : QObject(parent)
     QObject::connect(sock, SIGNAL(response(QByteArray)), this, SLOT(response(QByteArray)));
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(requestStatus()));
-    timer->start(6000);
+    timer->start(2000);
     requestPoll = 0;
 }
 void PJLink::setPower(bool state) {
