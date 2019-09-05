@@ -9,6 +9,8 @@ VolumeHandler::VolumeHandler(QObject *parent) : QObject(parent)
 
 void VolumeHandler::setDefaults() {
     osmc.setVolume(50);
+    volMute = false;
+    osmc.setVolumeMute(false);
 }
 
 void VolumeHandler::setVolumeUp() {
@@ -80,6 +82,29 @@ void VolumeHandler::setVolumeMute(bool choice) {
         break;
     }
 }
+
+void VolumeHandler::toggleVolumeMute() {
+    QByteArray msg;
+    switch (currentDevice) {
+        case eVolumeRaspberryHDMI:
+            if(volMute) {
+                volMute = !volMute;
+                osmc.setVolumeMute(false);
+             } else {
+                volMute = !volMute;
+                 osmc.setVolumeMute(true);
+              }
+        break;
+    case eVolumeRaspberryHeadphones:
+         msg = "#HW,HP,Vol,Mute=On*";
+         emit volumeChanged(msg);
+        // Do nothing
+        break;
+    case eVolumeAmplifier:
+        break;
+    }
+}
+
 
 void VolumeHandler::setVolumeControl(eVolumeControlDevices dev) {
     currentDevice = dev;

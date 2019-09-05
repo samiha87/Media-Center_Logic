@@ -61,6 +61,23 @@ void OSMC::setVolumeDown() {
     sendCommand(&jDocument);
 }
 
+// {"jsonrpc":"2.0","method":"Application.SetMute","params":{"mute":true},"id":1}
+void OSMC::setVolumeMute(bool choice) {
+    QJsonObject params;
+    QJsonObject jObject;
+    QJsonDocument jDocument;
+    if(choice) params.insert("mute",true);
+    else params.insert("mute", false);
+
+    jObject.insert("jsonrpc", "2.0");   // OSMC RPC API version
+    jObject.insert("method", "Application.SetMute");
+    jObject.insert("params", params);
+    jObject.insert("id", 1);
+    jDocument.setObject(jObject);
+    qDebug() << "OSMC::setVolumeDown() JSON= " << jDocument.toJson();
+    sendCommand(&jDocument);
+}
+
 void OSMC::sendCommand(QJsonDocument *doc) {
 
     QUrl serviceUrl = QUrl("http://" + instanceAddress + ":" + QString::number(instancePort) + "/jsonrpc");

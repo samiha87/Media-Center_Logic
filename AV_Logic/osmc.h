@@ -16,6 +16,8 @@ public:
     void setVolumeUp();
     // Deacreases volume with one step
     void setVolumeDown();
+    // Sets OSMC volume mute state
+    void setVolumeMute(bool choice);
     // Set OSMC address and port
     void setAddress(QString address, qint16 port);
 signals:

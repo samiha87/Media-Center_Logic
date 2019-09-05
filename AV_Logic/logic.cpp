@@ -45,7 +45,7 @@ void Logic::messageParser(QByteArray msg) {
         displayParser(msg);    // Process display message and act accordingly
     }
 
-    if(msg.contains("Vol")) {
+    if(msg.contains("Audio")) {
         qDebug() << "Logic::messageParser() Volume adjustment";
         msg = msg.remove(0, 3); // remove vol
         volumeParser(msg);
@@ -74,6 +74,9 @@ void Logic::volumeParser(QByteArray msg) {
         } else if(msg.contains("Down")) {
             qDebug() << "Logic::displayParser() Turn projector off";
             volHandler->setVolumeDown();
+        } else if(msg.contains("Mute")) {
+            qDebug() << "Logic::displayParser() Toggle Mute";
+            volHandler->toggleVolumeMute();
         }
     }
 }

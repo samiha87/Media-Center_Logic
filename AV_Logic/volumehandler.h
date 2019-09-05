@@ -25,6 +25,8 @@ public:
     void setVolume(int volLvl);
     // Set volume mute
     void setVolumeMute(bool choice);
+    // Toggles selected audio devices mute
+    void toggleVolumeMute();
     // Sest which type of device is being controlled
     void setVolumeControl(eVolumeControlDevices dev);    // Default Raspberry Pi
 signals:
@@ -32,6 +34,8 @@ signals:
 private:
     eVolumeControlDevices currentDevice;    // Default Raspberry Pi
     OSMC osmc;
+
+    bool volMute;
 
 public slots:
 };
