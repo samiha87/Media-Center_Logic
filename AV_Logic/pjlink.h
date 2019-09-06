@@ -64,7 +64,7 @@ public:
     void setInput(Projector_Channels input);
     void setIpAddress(QString ip);
     void setPassword(QString pass);
-    void setPort(int port_);
+    void setPort(quint16 port_);
 
 signals:
     void projectorStatus(QByteArray msg);
@@ -82,7 +82,7 @@ private:
     QTimer *timer;
 
     bool connected;
-    qint16 port;
+    quint16 port;
     TCPSocket *sock;
 
     void sendCommand(QString cmd);
@@ -95,6 +95,7 @@ private:
     int projVolume = 0;
     int projInput = 0;
     int projLamp = 0;
+    bool requestedPowerState;
 };
 
 #endif // PJLINK_H

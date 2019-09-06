@@ -2,6 +2,7 @@
 #define LOGIC_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "pjlink.h"
 #include "hardwareadapter.h"
@@ -29,6 +30,12 @@ private:
     void displayParser(QByteArray msg);
     // Parses messages pointed for volume. Contains volume logic.
     void volumeParser(QByteArray msg);
+    // Auto shutdown. This is called when shutdownt timer reaches timeout
+    // Shuts whole system down
+    void systemAutoShutdown();
+    // Timer is started when projector is detected open.
+    // After x amount of time projector will automatically be shutdown
+    QTimer *shutdownTimer;
 };
 
 #endif // LOGIC_H

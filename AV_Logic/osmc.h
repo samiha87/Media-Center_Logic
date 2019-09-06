@@ -27,13 +27,15 @@ signals:
 public slots:
     void reply(QNetworkReply *rep);
 private:
+    // Send http post
+    void sendCommand(QJsonDocument *doc);
+
     QString instanceAddress;
     qint16 instancePort;
     // Stores OSMC current volume
     int currentVolume;
     QNetworkAccessManager *networkManager;
-    // Send http post
-    void sendCommand(QJsonDocument *doc);
+
 
 };
 

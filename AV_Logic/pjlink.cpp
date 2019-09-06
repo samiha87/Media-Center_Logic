@@ -3,7 +3,6 @@
 #include <qcryptographichash.h>
 // https://pjlink.jbmia.or.jp/english/data/5-1_PJLink_eng_20131210.pdf
 
-
 PJLink::PJLink(QObject *parent) : QObject(parent)
 {
     port = PJLINK_PORT;
@@ -11,16 +10,20 @@ PJLink::PJLink(QObject *parent) : QObject(parent)
     QObject::connect(sock, SIGNAL(response(QByteArray)), this, SLOT(response(QByteArray)));
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(requestStatus()));
-    timer->start(2000);
+    timer->start(1500);
     requestPoll = 0;
+    requestedPowerState = false;
 }
+
 void PJLink::setPower(bool state) {
     if(state) {
         //send power on
         sendCommand("POWR 1");
+        requestedPowerState = true;
     } else {
         sendCommand("POWR 0");
         // Send power off
+        requestedPowerState = false;
     }
 }
 
@@ -71,8 +74,6 @@ void PJLink::setInput(Projector_Channels input) {
     case Channel_VIDEO:
         sendCommand("INPT 22");
     break;
-    default:
-        break;
     }
 }
 
@@ -97,7 +98,6 @@ void PJLink::requestStatus() {
     if(requestPoll > 4) {
         requestPoll = 0;
     }
-
 }
 
 void PJLink::requestStatusPwr() {
@@ -132,7 +132,7 @@ void PJLink::setPassword(QString pass) {
     password = pass;
 }
 
-void PJLink::setPort(int port_) {
+void PJLink::setPort(quint16 port_) {
     port = port_;
 }
 void PJLink::response(QByteArray msg) {
@@ -162,12 +162,14 @@ void PJLink::response(QByteArray msg) {
             if(msg == "0") {
                 qDebug("Proj power off");
                 powerState = 0;
+                if(requestedPowerState) sendCommand("POWR 1");  // Power should be true
                 // start_byte, response, Projector, power, power state
                 emit projectorStatus("Proj,Pwr,0");
             } else if (msg == "1") {
                 qDebug("Proj power is on");
                 powerState = 1;
                 emit projectorStatus("Proj,Pwr,1");
+                if(!requestedPowerState) sendCommand("POWR 0"); // Power should be false
             }
         }
         sock->close();

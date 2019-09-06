@@ -7,7 +7,7 @@ Logic::Logic(QObject *parent) : QObject(parent)
     pjlink = new PJLink(this);
     hwAdapter = new HardwareAdapter(this);
     volHandler = new VolumeHandler(this);
-
+    shutdownTimer = new QTimer(this);
     pjlink->setPort(4352); // Default port for PJLink
     pjlink->setIpAddress("10.42.0.100");
     pjlink->setPassword("5233");
@@ -20,6 +20,7 @@ Logic::Logic(QObject *parent) : QObject(parent)
     // Connect Volume Handler to hardware tx
     QObject::connect(volHandler, SIGNAL(volumeChanged(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
     // Connect to projector
+    QObject::connect(shutdownTimer, SIGNAL(), this, SLOT(systemAutoShutdown()));
     qDebug() << "Logic:: Starting()";
 }
 
@@ -34,6 +35,12 @@ QByteArray Logic::makeMessage(QByteArray input) {
 // Slots
 void Logic::displayMessageParser(QByteArray msg) {
     qDebug() << "Logic::displayMessageParser " << msg;
+    // Check power status
+    if(msg.contains("Pwr=On")) {
+        // Always when power is set on start a timer. After 3H shutdown projector
+        shutdownTimer->start(10800000); // 3H * 60min * 60s * 1000mS = 10800000
+    }
+    if(msg.contains("Pwr=Off")) shutdownTimer->stop();
     QByteArray builtMsg = makeMessage(msg); // Turn message into correct format for hardware layer
     emit hardwareTx(builtMsg);
 }
@@ -79,4 +86,8 @@ void Logic::volumeParser(QByteArray msg) {
             volHandler->toggleVolumeMute();
         }
     }
+}
+
+void Logic::systemAutoShutdown() {
+    pjlink->setPower(false);
 }
