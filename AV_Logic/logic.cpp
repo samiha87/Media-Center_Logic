@@ -20,7 +20,7 @@ Logic::Logic(QObject *parent) : QObject(parent)
     // Connect Volume Handler to hardware tx
     QObject::connect(volHandler, SIGNAL(volumeChanged(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
     // Connect to projector
-    QObject::connect(shutdownTimer, SIGNAL(), this, SLOT(systemAutoShutdown()));
+  //  QObject::connect(shutdownTimer, SIGNAL(), this, SLOT(systemAutoShutdown()));
     qDebug() << "Logic:: Starting()";
 }
 

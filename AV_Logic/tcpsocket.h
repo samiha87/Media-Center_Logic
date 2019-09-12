@@ -19,10 +19,13 @@ public:
 
 public slots:
     void reConnect();
+    // This is added due projector connection seems to have trouble
+    void reCreateConnection();
     void connected();
     void disconnected();
     void bytesWritten(qint64 bytes);
     void readyRead();
+
 signals:
     // Emit a response signal when message retrieved from socket
     void response(QByteArray array);

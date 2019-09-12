@@ -120,6 +120,7 @@ void PJLink::requestLamp() {
 
 void PJLink::sendCommand(QString command) {
    //1. Connect and wait for response
+
     pendingCommand = "%1" + command;
     sock->connect(ipAddress, port);
 }
