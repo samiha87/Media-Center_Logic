@@ -39,7 +39,7 @@ void HardwareAdapter::hardwareTx(QByteArray msg) {
     tcp->send(msg);
 }
 
-// Start a python based hardware layer
+// Start a python based hardware layer -> This is not best way to do this
 void HardwareAdapter::startHardwareLayer() {
   /*  QString path = "/opt/hardwarelayer/";
     qDebug() << "HardwareAdapter::startHardwareLayer() " << path;
@@ -67,6 +67,6 @@ void HardwareAdapter::stopHardwareLayer() {
     process->waitForFinished();
     qDebug() << "HardwareAdapter::startHardwareLayer() " << process->readAll();
     // Connect to hardware layer
-    process->close();
+    process->close(); // Kills the process
     process->deleteLater();
 }

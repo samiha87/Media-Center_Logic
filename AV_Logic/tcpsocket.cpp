@@ -25,6 +25,18 @@ void TCPSocket::connect(QString address, quint16 port) {
 
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
+        if(socket != nullptr) {
+            QObject::disconnect(socket, SIGNAL(connected()), this, SLOT(connected()));
+            QObject::disconnect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+            QObject::disconnect(socket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
+            QObject::disconnect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+            delete socket;
+            socket = new QTcpSocket(this);
+            QObject::connect(socket, SIGNAL(connected()), this, SLOT(connected()));
+            QObject::connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+            QObject::connect(socket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
+            QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+        }
         socket->connectToHost(address, port);
     }
 }
@@ -57,7 +69,7 @@ void TCPSocket::disconnected() {
 }
 
 void TCPSocket::bytesWritten(qint64 bytes) {
-    Q_UNUSED(bytes);
+    Q_UNUSED(bytes)
 }
 // Called when anydata is incoming
 void TCPSocket::readyRead() {

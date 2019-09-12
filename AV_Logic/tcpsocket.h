@@ -9,7 +9,7 @@ class TCPSocket : public QObject
 {
     Q_OBJECT
 public:
-    explicit TCPSocket(QObject *parent = 0);
+    explicit TCPSocket(QObject *parent = nullptr);
     // Connect to desired address and port
     void connect(QString address, quint16 port);
     // Send message to the socket

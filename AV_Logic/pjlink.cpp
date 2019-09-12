@@ -173,7 +173,6 @@ void PJLink::response(QByteArray msg) {
             }
         }
         sock->close();
-
         if(msg.contains("AVMT=")) {
             msg = msg.remove(0, 5);
             msg.chop(1);
@@ -214,6 +213,7 @@ void PJLink::response(QByteArray msg) {
             message.append("Proj,lamp,");
             if (projLamp < 0 || projLamp > 10000) {
                 qDebug() << "PJlink proj lamp not correct " + QString::number(projLamp);
+
                 sock->close();
                 return;
             }
