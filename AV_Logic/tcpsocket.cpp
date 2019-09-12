@@ -21,9 +21,7 @@ void TCPSocket::connect(QString address, quint16 port) {
     if(socket == nullptr) return;
     socket->connectToHost(address, port);
     qDebug() << "connecting...";
-    for(int i = 0; i < 100; i++) {
-        int *y = new int;
-    }
+
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
        // QTimer::singleShot(10000, this, SLOT(reCreateConnection()));
