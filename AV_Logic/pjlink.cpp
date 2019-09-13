@@ -129,13 +129,26 @@ void PJLink::setIpAddress(QString ip) {
     ipAddress = ip;
 }
 
+QString PJLink::getIpAddress() {
+    return ipAddress;
+}
+
 void PJLink::setPassword(QString pass) {
     password = pass;
+}
+
+QString PJLink::getPassword() {
+    return password;
 }
 
 void PJLink::setPort(quint16 port_) {
     port = port_;
 }
+
+quint16 PJLink::getPort() {
+    return port;
+}
+
 void PJLink::response(QByteArray msg) {
     qDebug() << "PJLINK::response()" << msg;
     // Parse

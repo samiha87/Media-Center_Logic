@@ -83,7 +83,6 @@ void OSMC::setVolumeMute(bool choice) {
 void OSMC::sendCommand(QJsonDocument *doc) {
 
     QUrl serviceUrl = QUrl("http://" + instanceAddress + ":" + QString::number(instancePort) + "/jsonrpc");
-    //QUrl serviceUrl = QUrl("127.0.0.1:4444");
     qDebug() << "OSMC::sendCommand() URL " << serviceUrl;
     QNetworkRequest request(serviceUrl);
     request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");

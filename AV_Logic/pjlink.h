@@ -55,17 +55,28 @@ class PJLink : public QObject
 
 public:
     explicit PJLink(QObject *parent = nullptr);
+    // Set powerstate, true = on, false = off
     void setPower(bool state);
-
+    // Set video mute, true mute on, false mute off
     void setVideoMute(bool state);
+    // Set audio mute, true mute on, false mute off
     void setAudioMute(bool state);
+    // Set audio and video mute. ture mute on, false mute off
     void setAVMute(bool state);
-
+    // Select projected input, choices in enum
     void setInput(Projector_Channels input);
+    // Set projector ip address
     void setIpAddress(QString ip);
+    // Return current ip address
+    QString getIpAddress();
+    // Set PJLink password
     void setPassword(QString pass);
+    // Return PJLink password
+    QString getPassword();
+    // Set PJLink port address, default is 4352
     void setPort(quint16 port_);
-
+    // Return PJLink port address
+    quint16 getPort();
 signals:
     void projectorStatus(QByteArray msg);
 public slots:
