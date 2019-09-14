@@ -6,8 +6,8 @@
 PJLink::PJLink(QObject *parent) : QObject(parent)
 {
     port = PJLINK_PORT;
-    sock = new TCPSocket();
-    QObject::connect(sock, SIGNAL(response(QByteArray)), this, SLOT(response(QByteArray)));
+    sock = new TCPSocket(this);
+    connect(sock, SIGNAL(response(QByteArray)), this, SLOT(response(QByteArray)));
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(requestStatus()));
     timer->start(1500);

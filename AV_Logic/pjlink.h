@@ -79,6 +79,8 @@ public:
     quint16 getPort();
 signals:
     void projectorStatus(QByteArray msg);
+    // Only for unit tests
+    void stateChanged();
 public slots:
     void response(QByteArray msg);
     void requestStatusPwr();

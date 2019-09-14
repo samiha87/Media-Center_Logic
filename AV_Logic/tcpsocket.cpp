@@ -46,7 +46,12 @@ void TCPSocket::connect(QString address, quint16 port) {
 }
 
 void TCPSocket::send(QByteArray array) {
-    if(socket == nullptr) return;
+    if(socket == nullptr) {
+        qDebug() << "TCPSocket::send() Socket is null";
+        return;
+    }
+    if(!socket->isWritable())qDebug() << "TCPSocket::send() Socket not writable";
+    if(!socket->isOpen()) qDebug() << "TCPSocket::send() Socket not open";
     if(socket->isOpen() && socket->isWritable()) {
         qDebug() << "TCPSocket::send bytearray " << QString(array);
         socket->write(array);
@@ -68,7 +73,7 @@ void TCPSocket::reCreateConnection() {
 }
 
 void TCPSocket::connected() {
-
+    qDebug() << "TCPSocket::connected()";
 }
 // If disconnects try reconnecting after 10 second
 // TODO check raspi qt modules, QTimer singleshot is missing
@@ -79,6 +84,7 @@ void TCPSocket::disconnected() {
 void TCPSocket::bytesWritten(qint64 bytes) {
     Q_UNUSED(bytes)
 }
+
 // Called when anydata is incoming
 void TCPSocket::readyRead() {
     if(socket == nullptr) return;
