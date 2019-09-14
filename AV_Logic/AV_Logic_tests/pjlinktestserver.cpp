@@ -1,6 +1,7 @@
 // Qt Include
 #include <QDebug>
 #include <QTime>
+#include <qcryptographichash.h>
 
 // Project Include
 #include "pjlinktestserver.h"
@@ -16,6 +17,7 @@ TCPServer::TCPServer(quint16 port, QObject *parent) : QObject(parent)
         qDebug() << "TCPServer:TCPServer() Hosted succesfuly " << server->serverAddress().toString() << ":" << QString::number(server->serverPort());
     }
 }
+
 /*
 * Connect
 * Response PJLINK 1 00003a9e
@@ -26,7 +28,8 @@ TCPServer::TCPServer(quint16 port, QObject *parent) : QObject(parent)
 */
 void TCPServer::newConnection() {
     running = true;
-    QTcpSocket *socket = server->nextPendingConnection();
+    socket = server->nextPendingConnection();
+    connect(socket, SIGNAL(readyRead()) ,this, SLOT(readyRead()));
     // Respond PJLink type
     QByteArray msg;
     // Build response example. Response PJLINK 1 00003a9e
@@ -35,8 +38,8 @@ void TCPServer::newConnection() {
     msg.append(" ");
     QTime time = QTime::currentTime();
     qsrand(static_cast<uint>(time.msec()));
-    QByteArray randomKey;
-    for(int i = 0; i < 9; i++) {
+    randomKey.clear();
+    for(int i = 0; i < 8; i++) {
         int n = qrand() % 16;
         randomKey.append(QString::number(n, 16));
     }
@@ -84,4 +87,22 @@ bool TCPServer::hasReply() {
     }
 }
 
+void TCPServer::readyRead(){
+    QByteArray msg = qobject_cast<QTcpSocket *>(sender())->readAll();
+    qDebug() << "TCPServer::readyRead() " << msg;
+    QByteArray generateHashcode;
+    randomKey.chop(1);
+    generateHashcode.append(randomKey);
+    qDebug() << "TCPServer::readyRead() Random key " << generateHashcode;
+    generateHashcode.append(password.toUtf8());
+
+    QByteArray hashed = QCryptographicHash::hash(generateHashcode, QCryptographicHash::Md5).toHex();
+    // PJLink
+    // Compare received messages
+    qDebug() <<"Generated " << hashed;
+    if(msg.contains(hashed)) {
+        qDebug() << "TCPServer::readyRead() " << " Connection ok";
+        emit stateChanged();
+    }
+}
 

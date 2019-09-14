@@ -41,9 +41,11 @@ public:
 signals:
     void operate(const QString &);
     void runClient(const QString &);
+
 private slots:
     void testConnectionParameters();
     void testConnectingHost();
+
 };
 
 PJLinkTester::PJLinkTester()
@@ -81,8 +83,9 @@ void PJLinkTester::testConnectingHost() {
     connect(this, SIGNAL(runClient(const QString)), pjClientThread, SLOT(doWork(const QString)));
     clientThread.start();
     emit runClient("now");    // Start thread
-    QThread::sleep(1); // wait for 2 seconds
+    QThread::sleep(2); // wait for 2 seconds
     // Check if hashed message was sucessfull
+    QVERIFY(pjThread->isConnected() == true);
 
     serverThread.quit();
     serverThread.wait();

@@ -9,27 +9,34 @@
 class PJLinkServer: public QObject
 {
     Q_OBJECT
-
+public:
+    bool isConnected() {
+        return connected;
+    }
 public slots:
     void doWork(const QString &parameter) {
         qDebug() << "Thread running";
         tcp = new TCPServer(4242);
-        connect(tcp, SIGNAL(stateChanged()), this, SLOT(statusCheck()));
+        connect(tcp, SIGNAL(stateChanged()), this, SLOT(connectionOk()));
         tcp->setPassword("12345");
         tcp->setType(1);
         tcp->waitConnection();
     }
 
-    void statusCheck() {
-        qDebug() << "Thread status check";
+    void connectionOk() {
+        qDebug() << "PJLinkServer::Connection ok";
+        emit connectionTestedOk();
+        connected = true;
     }
-
+signals:
+    void connectionTestedOk();
 signals:
     void resultReady(const QString &result);
     void hashedConnectionState(bool status);
 
 private:
     TCPServer *tcp;
+    bool connected = false;
 };
 
 #endif // PJLINKSERVER_H

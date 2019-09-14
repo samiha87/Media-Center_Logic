@@ -17,7 +17,6 @@ public:
     void setPassword(QString pass);
     bool isRunning();
     void setType(int type_);
-    bool isConnectionOk();
 
 signals:
     void stateChanged();
@@ -27,7 +26,7 @@ private slots:
     // Once session opens, send PJLink1 and random key
     void sendRandomKey();
     void newConnection();
-
+    void readyRead();
 
 private:
     QTcpServer *server = nullptr;
@@ -37,6 +36,7 @@ private:
     bool reply = false;
     bool connectionOk = false;
     int type;   // Contains type of pjlink
+    QByteArray randomKey = "";
 };
 
 #endif // TCPSERVER_H
