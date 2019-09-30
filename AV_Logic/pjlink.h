@@ -93,6 +93,7 @@ private:
     QString password;
     QString pendingCommand;
     QTimer *timer;
+    QTimer *connectionTimer;
 
     bool connected;
     quint16 port;
@@ -109,6 +110,11 @@ private:
     int projInput = 0;
     int projLamp = 0;
     bool requestedPowerState;
+private slots:
+    // This is called after every 10s
+    // When called sets a boolean connected to false. This boolean is changed to True once message from projector is received.
+    // If message has not been received inside 10s, we will inform controller(Mobile) that we are disconnected from projector.
+    void checkConnectionStatus();
 };
 
 #endif // PJLINK_H

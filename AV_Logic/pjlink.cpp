@@ -9,10 +9,14 @@ PJLink::PJLink(QObject *parent) : QObject(parent)
     sock = new TCPSocket(this);
     connect(sock, SIGNAL(response(QByteArray)), this, SLOT(response(QByteArray)));
     timer = new QTimer();
+    connectionTimer = new QTimer(); // If no message has been received from project in time X. Mark it as disconnected.
     connect(timer, SIGNAL(timeout()), this, SLOT(requestStatus()));
+    connect(connectionTimer, SIGNAL(timeout()), this, SLOT(checkConnectionStatus()));
     timer->start(1500);
+    connectionTimer->start(10000);    // Check connection every 10s
     requestPoll = 0;
     requestedPowerState = false;
+    connected = false;
 }
 
 void PJLink::setPower(bool state) {
@@ -77,8 +81,21 @@ void PJLink::setInput(Projector_Channels input) {
     }
 }
 
+void PJLink::checkConnectionStatus() {
+    // Check if we have connected to projector
+    // If not send response to Application that we have no connection
+    if(!connected) {
+        qDebug() << "PJLink::checkConnectionStatus() we have no connection";
+        emit projectorStatus("Proj,Conn,0");
+    } else {
+        emit projectorStatus("Proj,Conn,1");
+    }
+    connected = false;
+}
+
 void PJLink::requestStatus() {
     qDebug() << "PJLink requestStatus";
+
     switch (requestPoll) {
         case 0:
     case 1:
@@ -153,6 +170,7 @@ void PJLink::response(QByteArray msg) {
     qDebug() << "PJLINK::response()" << msg;
     // Parse
     if(msg.contains("PJLINK 1")) {
+        connected = true;
         // Remove PJLINK 1 , 9 bits
         QByteArray random_number = msg.remove(0, 9);
         random_number.chop(1);
@@ -227,7 +245,6 @@ void PJLink::response(QByteArray msg) {
             message.append("Proj,lamp,");
             if (projLamp < 0 || projLamp > 10000) {
                 qDebug() << "PJlink proj lamp not correct " + QString::number(projLamp);
-
                 sock->close();
                 return;
             }

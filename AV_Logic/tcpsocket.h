@@ -19,8 +19,6 @@ public:
 
 public slots:
     void reConnect();
-    // This is added due projector connection seems to have trouble
-    void reCreateConnection();
     void connected();
     void disconnected();
     void bytesWritten(qint64 bytes);

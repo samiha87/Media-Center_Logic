@@ -27,9 +27,6 @@ def ThreadedServer(host, port, icom_in, icom_out):
 					    conn.close() # Close socket and exit while loop
 					    # Wait until new connection is established
 					    break							
-					
-					
-
 				try:
 					data = conn.recv(1024)
 					if data:
@@ -43,7 +40,6 @@ def ThreadedServer(host, port, icom_in, icom_out):
 							if hw_data:
 								print(hw_data)
 						icom_out.put(data)
-						print(data)
 				except:
 					data = None
 				try:

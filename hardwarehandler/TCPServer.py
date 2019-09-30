@@ -28,6 +28,7 @@ def ThreadedServer(host, port, icom_in, icom_out):
 					    # Wait until new connection is established
 					    break							
 					
+					
 
 				try:
 					data = conn.recv(1024)
