@@ -1,13 +1,13 @@
 #ifndef LOGIC_H
 #define LOGIC_H
-
+// Qt Includes
 #include <QObject>
 #include <QTimer>
-
+// Project Includes
 #include "pjlink.h"
 #include "hardwareadapter.h"
 #include "volumehandler.h"
-
+#include "devicepool.h" // Handles and controls devices
 class Logic : public QObject
 {
     Q_OBJECT

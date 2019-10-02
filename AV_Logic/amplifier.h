@@ -5,7 +5,7 @@
 // Project includes
 #include "irdevice.h"
 
-class Amplifier : public QObject, IRDevice
+class Amplifier : public QObject, public IRDevice
 {
     Q_OBJECT
 public:
