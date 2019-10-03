@@ -33,9 +33,10 @@ void ProjectorConfigurator::clearConfiguration() {
     instanceUser = "";
     instancePassword = "";
 }
-
-QObject *ProjectorConfigurator::createProjectorConfiguration(ProjectControlTypes type) {
-    QObject *object;
+// Configure object here and return configured object to factory
+// Factory is only allowed to acces common functions
+DisplayDevice *ProjectorConfigurator::createProjectorConfiguration(QString deviceName, ProjectControlTypes type, QObject *connectTo) {
+    PJLink *object;
     switch (type) {
     case (ePanasonic):
         break;
@@ -43,10 +44,12 @@ QObject *ProjectorConfigurator::createProjectorConfiguration(ProjectControlTypes
         if(!lanConfigurationFlag) return nullptr;
         object = new PJLink();
         if(instancePort > 0) qobject_cast<PJLink *>(object)->setPort(instancePort);
-        qobject_cast<PJLink *>(object)->setIpAddress(instanceAddress);
+        qobject_cast<PJLink *>(object)->setAddress(instanceAddress);
         if(authConfigurationFlag) qobject_cast<PJLink *>(object)->setPassword(instancePassword);
         clearConfiguration();
-        return object;
+        QObject::connect(qobject_cast<PJLink *>(object), SIGNAL(statusChanged(QByteArray)), connectTo, SLOT(statusChanged(QByteArray)));
+        // Connect to upper classes
+        return static_cast<DisplayDevice *>(object);
     case (eRS232):
         break;
     case (eVISCA_LAN):

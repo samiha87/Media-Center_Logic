@@ -16,7 +16,7 @@ else
 fi
 # Copy files to raspberry
 echo "Installing hardware layer"
-scp -r -v ../hardwarehandler $USER@$RASPBERRY_IP:~/opt/hardwarelayer/ > output.log 2>&1
+scp -r -v ../hardwarelayer/ $USER@$RASPBERRY_IP:/opt/hardwarelayer/ > output.log 2>&1
 input="output.log"
 #Open output of scp and check if installation was succesfull
 while IFS= read -r line

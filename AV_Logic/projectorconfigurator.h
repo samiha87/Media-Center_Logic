@@ -6,6 +6,7 @@
 
 // Project Includes
 #include "pjlink.h"
+#include "displaydevice.h"
 
 class ProjectorConfigurator : public QObject
 {
@@ -21,7 +22,7 @@ public:
     ProjectorConfigurator(QObject *parent = nullptr);
     void setLanConfiguration(QString ipAddress, quint16 port);
     void setAuthorization(QString user, QString password);
-    QObject *createProjectorConfiguration(ProjectControlTypes type);
+    DisplayDevice *createProjectorConfiguration(QString deviceName, ProjectControlTypes type, QObject *connectTo);
     void clearConfiguration();
     void setName(QString name);
 

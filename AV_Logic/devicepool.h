@@ -7,10 +7,19 @@
  */
 #include <QObject>
 #include "amplifier.h"
+
 #include "projectorconfigurator.h"
+#include "audioconfigurator.h"
+
+#include "AudioDevice.h"
+#include "displaydevice.h"
+#include "displaylogic.h"
 
 class DevicePool : public QObject
 {
+    Q_OBJECT
+
+public:
     enum deviceControlType {
         InfraRed,
         RS232,
@@ -24,13 +33,12 @@ class DevicePool : public QObject
         eLights,
     };
 
-    Q_OBJECT
-    void createDevice(QString deviceName, deviceControlType control, deviceTypes dev);
-public:
     explicit DevicePool(QObject *parent = nullptr);
-    QList<QObject *> audioDevices;
-    QList<QObject *> displayDevices;
-    QList<QObject *> lightDevices;
+    void createDevice(QString deviceName, deviceControlType control, deviceTypes dev);
+
+    QList<AudioDevice *> audioDevices;
+    QList<DisplayLogic *> displayDevices;
+    //QList<Device *> lightDevices;
 
 signals:
 

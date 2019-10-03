@@ -5,6 +5,7 @@
 
 PJLink::PJLink(QObject *parent) : QObject(parent)
 {
+    userName = "";
     port = PJLINK_PORT;
     sock = new TCPSocket(this);
     connect(sock, SIGNAL(response(QByteArray)), this, SLOT(response(QByteArray)));
@@ -61,7 +62,7 @@ void PJLink::setAVMute(bool state) {
     }
 }
 
-void PJLink::setInput(Projector_Channels input) {
+void PJLink::setInput(DisplayDevice::DisplayChannels input) {
     switch (input) {
     case Channel_DIGITAL:
         sendCommand("INPT 31");
@@ -78,6 +79,9 @@ void PJLink::setInput(Projector_Channels input) {
     case Channel_VIDEO:
         sendCommand("INPT 22");
     break;
+    case Channel_HDMI:
+        sendCommand("INPT 22");
+    break;
     }
 }
 
@@ -86,9 +90,9 @@ void PJLink::checkConnectionStatus() {
     // If not send response to Application that we have no connection
     if(!connected) {
         qDebug() << "PJLink::checkConnectionStatus() we have no connection";
-        emit projectorStatus("Proj,Conn,0");
+        emit statusChanged("Proj,Conn,0");
     } else {
-        emit projectorStatus("Proj,Conn,1");
+        emit statusChanged("Proj,Conn,1");
     }
     connected = false;
 }
@@ -142,14 +146,16 @@ void PJLink::sendCommand(QString command) {
     sock->connect(ipAddress, port);
 }
 
-void PJLink::setIpAddress(QString ip) {
+void PJLink::setAddress(QString ip) {
     ipAddress = ip;
 }
 
 QString PJLink::getIpAddress() {
     return ipAddress;
 }
-
+void PJLink::setUser(QString user) {
+    userName = user;
+}
 void PJLink::setPassword(QString pass) {
     password = pass;
 }
@@ -196,11 +202,11 @@ void PJLink::response(QByteArray msg) {
                 powerState = 0;
                 if(requestedPowerState) sendCommand("POWR 1");  // Power should be true
                 // start_byte, response, Projector, power, power state
-                emit projectorStatus("Proj,Pwr,0");
+                emit statusChanged("Proj,Pwr,0");
             } else if (msg == "1") {
                 qDebug("Proj power is on");
                 powerState = 1;
-                emit projectorStatus("Proj,Pwr,1");
+                emit statusChanged("Proj,Pwr,1");
                 if(!requestedPowerState) sendCommand("POWR 0"); // Power should be false
             }
         }
@@ -217,7 +223,7 @@ void PJLink::response(QByteArray msg) {
                 return;
             }
             message.append(QString::number(projVolume).toLocal8Bit());
-            emit projectorStatus(message);
+            emit statusChanged(message);
             sock->close();
         }
 
@@ -233,7 +239,7 @@ void PJLink::response(QByteArray msg) {
             return;
             }
             message.append(QString::number(projInput).toLocal8Bit());
-            emit projectorStatus(message);
+            emit statusChanged(message);
             sock->close();
         }
 
@@ -249,7 +255,7 @@ void PJLink::response(QByteArray msg) {
                 return;
             }
             message.append(QString::number(projLamp).toLocal8Bit());
-            emit projectorStatus(message);
+            emit statusChanged(message);
             sock->close();
             }
         }

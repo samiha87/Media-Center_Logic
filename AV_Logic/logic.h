@@ -8,6 +8,7 @@
 #include "hardwareadapter.h"
 #include "volumehandler.h"
 #include "devicepool.h" // Handles and controls devices
+
 class Logic : public QObject
 {
     Q_OBJECT
@@ -22,6 +23,7 @@ public slots:
     void messageParser(QByteArray msg);
 
 private:
+    DevicePool devPool;
     HardwareAdapter *hwAdapter;
     PJLink *pjlink;
     VolumeHandler *volHandler;

@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <QByteArray>
 #include <QTimer>
+#include "displaydevice.h"
+#include "tcpdevice.h"
 
 #include "tcpsocket.h"
 
@@ -33,10 +35,9 @@
    Responded error because projector was already on
 */
 
-class PJLink : public QObject
+class PJLink : public QObject, public TCPDevice, public DisplayDevice
 {
     Q_OBJECT
-
     enum PJLINK_Response_codes {
         Successfull_execution,
         Undefinied_command,
@@ -45,40 +46,34 @@ class PJLink : public QObject
         Projector_failure
     };
 
-    enum Projector_Channels {
-        Channel_RGB,
-        Channel_VIDEO,
-        Channel_DIGITAL,
-        Channel_STORAGE,
-        Channel_NETWORK
-    };
-
 public:
     explicit PJLink(QObject *parent = nullptr);
     // Set powerstate, true = on, false = off
-    void setPower(bool state);
+    void setPower(bool state) override;
     // Set video mute, true mute on, false mute off
-    void setVideoMute(bool state);
+    void setVideoMute(bool state) override;
     // Set audio mute, true mute on, false mute off
     void setAudioMute(bool state);
     // Set audio and video mute. ture mute on, false mute off
     void setAVMute(bool state);
     // Select projected input, choices in enum
-    void setInput(Projector_Channels input);
+    void setInput(DisplayChannels input) override;
     // Set projector ip address
-    void setIpAddress(QString ip);
+    void setAddress(QString ip) override;
     // Return current ip address
     QString getIpAddress();
+
+    void setUser(QString user) override;
     // Set PJLink password
-    void setPassword(QString pass);
+    void setPassword(QString pass) override;
     // Return PJLink password
     QString getPassword();
     // Set PJLink port address, default is 4352
-    void setPort(quint16 port_);
+    void setPort(quint16 port_) override;
     // Return PJLink port address
     quint16 getPort();
 signals:
-    void projectorStatus(QByteArray msg);
+    void statusChanged(QByteArray msg) override;
     // Only for unit tests
     void stateChanged();
 public slots:
@@ -92,6 +87,7 @@ private:
     QString ipAddress;
     QString password;
     QString pendingCommand;
+    QString userName;
     QTimer *timer;
     QTimer *connectionTimer;
 

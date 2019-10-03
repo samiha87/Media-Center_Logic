@@ -1,4 +1,5 @@
 #include "devicepool.h"
+#include "displaydevice.h"
 
 DevicePool::DevicePool(QObject *parent) : QObject(parent)
 {
@@ -19,21 +20,26 @@ void DevicePool::createDevice(QString deviceName, deviceControlType control, dev
     }
 }
 
-
 void DevicePool::createLanDevice(QString deviceName, deviceTypes dev) {
-    QObject *object;
+    DisplayDevice *device;
+    DisplayLogic *dLogic;
+    AudioDevice *aDev;
+    ProjectorConfigurator proj;
+    AudioConfigurator audioConfig;
     switch(dev) {
     case eAmplifier:
+        // Create audio device, <deviceName> <Device type> <Control type>
+        aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifier, AudioConfigurator::eAudioIR );
+        audioDevices.append(aDev);
         break;
     case eDisplay:
         break;
     case eProjector:
         // Device name determines which type of control
-        object = new ProjectorConfigurator();
-        qobject_cast<ProjectorConfigurator *>(object)->setLanConfiguration("10.42.0.100", 0);
-        qobject_cast<ProjectorConfigurator *>(object)->setAuthorization("", "5233");
-        qobject_cast<ProjectorConfigurator *>(object)->setName(deviceName);
-        displayDevices.append(object);
+        dLogic = new DisplayLogic();
+        device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::ePJLink, dLogic);
+        dLogic->setDisplay(device);
+        displayDevices.append(dLogic);
         break;
     case eLights:
         break;
@@ -55,12 +61,11 @@ void DevicePool::createRS232Device(QString deviceName, deviceTypes dev) {
 
 void DevicePool::createIRDevice(QString deviceName, deviceTypes dev) {
     QObject *object;
-
     switch(dev) {
     case eAmplifier:
-         object = new Amplifier(this);
-         qobject_cast<Amplifier *>(object)->setDeviceName(deviceName);
-         audioDevices.append(object);
+     //    object = new Amplifier(this);
+      //   qobject_cast<Amplifier *>(object)->setDeviceName(deviceName);
+       //  audioDevices.append(object);
         break;
     case eDisplay:
         break;

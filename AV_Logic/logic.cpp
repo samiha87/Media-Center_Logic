@@ -4,23 +4,25 @@
 
 Logic::Logic(QObject *parent) : QObject(parent)
 {
-    pjlink = new PJLink(this);
+    // Create display
+    devPool.createDevice("Hitachi", devPool.Ethernet, devPool.eProjector);
+    // Create audio device
+    devPool.createDevice("Sony", devPool.InfraRed, devPool.eAmplifier);
+    // Create lights device
+   // devPool.createDevice("Dummy", devPool.Ethernet, devPool.eLights);
+
     hwAdapter = new HardwareAdapter(this);
     volHandler = new VolumeHandler(this);
     shutdownTimer = new QTimer(this);
-    pjlink->setPort(4352); // Default port for PJLink
-    pjlink->setIpAddress("10.42.0.100");
-    pjlink->setPassword("5233");
+
     // Transfer bluetooth messages coming from hardware layer to message parser and direct them to right modules
     QObject::connect(hwAdapter, SIGNAL(bleMessageRx(QByteArray)), this, SLOT(messageParser(QByteArray)));
     // Connect projector driver to this class and parse message.
-    QObject::connect(pjlink, SIGNAL(projectorStatus(QByteArray)), this, SLOT(displayMessageParser(QByteArray)));
+    QObject::connect(devPool.displayDevices[0], SIGNAL(newMessage(QByteArray)), this, SLOT(displayMessageParser(QByteArray)));
     // Connect outgoing data
     QObject::connect(this, SIGNAL(hardwareTx(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
     // Connect Volume Handler to hardware tx
     QObject::connect(volHandler, SIGNAL(volumeChanged(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
-    // Connect to projector
-  //  QObject::connect(shutdownTimer, SIGNAL(), this, SLOT(systemAutoShutdown()));
     qDebug() << "Logic:: Starting()";
 }
 
@@ -49,27 +51,15 @@ void Logic::messageParser(QByteArray msg) {
     qDebug() << "Logic::messageParser() " << msg;
     if(msg.contains("Proj")) {
         msg = msg.remove(0,4);// Remove #Proj
-        displayParser(msg);    // Process display message and act accordingly
+        for(auto &a: devPool.displayDevices) {
+            a->messageFromControl(msg);
+        }
     }
 
     if(msg.contains("Audio")) {
         qDebug() << "Logic::messageParser() Volume adjustment";
         msg = msg.remove(0, 3); // remove vol
         volumeParser(msg);
-    }
-}
-
-void Logic::displayParser(QByteArray msg) {
-    // Check if we have power command
-    qDebug() << "Logic::displayParser() " << msg;
-    if(msg.contains("Pwr")) {
-        if(msg.contains("On"))  {
-            qDebug() << "Logic::displayParser() Truning projector on";
-            pjlink->setPower(true);
-        } else if(msg.contains("Off")) {
-            qDebug() << "Logic::displayParser() Turn projector off";
-            pjlink->setPower(false);
-        }
     }
 }
 
