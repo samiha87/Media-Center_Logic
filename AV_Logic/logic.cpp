@@ -7,7 +7,9 @@ Logic::Logic(QObject *parent) : QObject(parent)
     // Create display
     devPool.createDevice("Hitachi", devPool.Ethernet, devPool.eProjector);
     // Create audio device
-    devPool.createDevice("Sony", devPool.InfraRed, devPool.eAmplifier);
+    devPool.createDevice("OSMC", devPool.InfraRed, devPool.eAmplifier);
+    // Create audio device which links to alreade created projector
+    //devPool.createDevice("Hitachi", devPool.InfraRed, devPool.eAudioViaProjector);
     // Create lights device
    // devPool.createDevice("Dummy", devPool.Ethernet, devPool.eLights);
 
@@ -19,10 +21,11 @@ Logic::Logic(QObject *parent) : QObject(parent)
     QObject::connect(hwAdapter, SIGNAL(bleMessageRx(QByteArray)), this, SLOT(messageParser(QByteArray)));
     // Connect projector driver to this class and parse message.
     QObject::connect(devPool.displayDevices[0], SIGNAL(newMessage(QByteArray)), this, SLOT(displayMessageParser(QByteArray)));
+    QObject::connect(devPool.audioDevices[0], SIGNAL(newMessage(QByteArray)), this, SLOT(audioMessageParser(QByteArray)));
     // Connect outgoing data
     QObject::connect(this, SIGNAL(hardwareTx(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
     // Connect Volume Handler to hardware tx
-    QObject::connect(volHandler, SIGNAL(volumeChanged(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
+   // QObject::connect(volHandler, SIGNAL(volumeChanged(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
     qDebug() << "Logic:: Starting()";
 }
 
@@ -47,6 +50,13 @@ void Logic::displayMessageParser(QByteArray msg) {
     emit hardwareTx(builtMsg);
 }
 
+void Logic::audioMessageParser(QByteArray msg) {
+    qDebug() << "Logic::audioMessageParser " << msg;
+    // Check power status
+    //QByteArray builtMsg = makeMessage(msg); // Turn message into correct format for hardware layer
+    emit hardwareTx(msg);
+}
+
 void Logic::messageParser(QByteArray msg) {
     qDebug() << "Logic::messageParser() " << msg;
     if(msg.contains("Proj")) {
@@ -59,7 +69,10 @@ void Logic::messageParser(QByteArray msg) {
     if(msg.contains("Audio")) {
         qDebug() << "Logic::messageParser() Volume adjustment";
         msg = msg.remove(0, 3); // remove vol
-        volumeParser(msg);
+        for(auto &a: devPool.audioDevices) {
+            a->messageFromControl(msg);
+        }
+        //volumeParser(msg);
     }
 }
 

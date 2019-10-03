@@ -25,11 +25,13 @@ void AudioConfigurator::setAuthorization(QString user, QString password) {
     instancePassword = password;
 }
 
-AudioDevice *AudioConfigurator::createAudioConfiguration(QString deviceName, AudioDeviceTypes type, AudioControlTypes control) {
+AudioDevice *AudioConfigurator::createAudioConfiguration(QString deviceName, AudioDeviceTypes type, AudioControlTypes control, QObject *connectTo) {
     Amplifier *object;
     switch (type) {
     case (eAudioAmplifier):
         object = new Amplifier();
+        object->setName(deviceName);
+        QObject::connect(object, SIGNAL(statusChanged(QByteArray)), connectTo, SLOT(statusChanged(QByteArray)));
         return configureAmplifier(object, control);  // Configure created amplifier and return it to device pool
     case (eAudioTV):
         break;
@@ -59,8 +61,12 @@ void AudioConfigurator::setName(QString name) {
 }
 
 AudioDevice *AudioConfigurator::configureAmplifier(Amplifier *amp, AudioControlTypes control) {
+    IRDevice *irdev;
     switch(control) {
     case eAudioIR:
+        irdev = new IRDevice();
+        irdev->setDeviceName(amp->getName());
+        amp->setIR(irdev);
         return static_cast<AudioDevice *>(amp);
     case eAudioLAN:
         break;

@@ -2,11 +2,14 @@
 
 Amplifier::Amplifier(QObject *parent) : QObject(parent)
 {
-    irDevice = new IRDevice();
 }
 
 void Amplifier::setName(QString name) {
     deviceName = name;
+}
+
+QString Amplifier::getName() {
+    return deviceName;
 }
 
 void Amplifier::setPower(bool state) {
@@ -36,6 +39,10 @@ void Amplifier::setMute(bool state) {
     irDevice->sendCommand(IRDevice::IRAudioVolMuteToggle);
 }
 
+void Amplifier::toggleMute() {
+    irDevice->sendCommand(IRDevice::IRAudioVolMuteToggle);
+}
+
 void Amplifier::setInput(AudioChannels channel) {
     switch (channel) {
     case AudioDevice::Channel_CD:
@@ -46,4 +53,8 @@ void Amplifier::setInput(AudioChannels channel) {
     case AudioDevice::Channel_NONE:
         break;
     }
+}
+
+void Amplifier::setIR(IRDevice *ir) {
+    irDevice = ir;
 }

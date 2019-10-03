@@ -24,19 +24,25 @@ void DevicePool::createLanDevice(QString deviceName, deviceTypes dev) {
     qDebug() << "DevicePool::createLanDevice()";
     DisplayDevice *device;
     DisplayLogic *dLogic;
+    AudioLogic *aLogic;
     AudioDevice *aDev;
     ProjectorConfigurator proj;
     AudioConfigurator audioConfig;
     switch(dev) {
     case eAmplifier:
         // Create audio device, <deviceName> <Device type> <Control type>
-        aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifier, AudioConfigurator::eAudioIR );
-        audioDevices.append(aDev);
+        qDebug() << "DevicePool::createLanDevice() Amplifier";
+        aLogic = new AudioLogic();
+        aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifier, AudioConfigurator::eAudioIR, aLogic );
+        aDev->setName(deviceName);
+        aLogic->setDevice(aDev);
+        audioDevices.append(aLogic);
         break;
     case eDisplay:
         break;
     case eProjector:
         // Device name determines which type of control
+        // If
         qDebug() << "DevicePool::createLanDevice() Projector";
         dLogic = new DisplayLogic();
         proj.setAuthorization("", "5233");
@@ -64,12 +70,19 @@ void DevicePool::createRS232Device(QString deviceName, deviceTypes dev) {
 }
 
 void DevicePool::createIRDevice(QString deviceName, deviceTypes dev) {
-    QObject *object;
+    AudioLogic *aLogic;
+    AudioDevice *aDev;
+    ProjectorConfigurator proj;
+    AudioConfigurator audioConfig;
     switch(dev) {
     case eAmplifier:
-     //    object = new Amplifier(this);
-      //   qobject_cast<Amplifier *>(object)->setDeviceName(deviceName);
-       //  audioDevices.append(object);
+        // Create audio device, <deviceName> <Device type> <Control type>
+        qDebug() << "DevicePool::createIRDevice() Amplifier";
+        aLogic = new AudioLogic();
+        aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifier, AudioConfigurator::eAudioIR, aLogic );
+        aDev->setName(deviceName);
+        aLogic->setDevice(aDev);
+        audioDevices.append(aLogic);
         break;
     case eDisplay:
         break;

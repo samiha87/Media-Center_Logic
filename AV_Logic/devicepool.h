@@ -13,7 +13,9 @@
 
 #include "AudioDevice.h"
 #include "displaydevice.h"
+
 #include "displaylogic.h"
+#include "audiologic.h"
 
 class DevicePool : public QObject
 {
@@ -36,7 +38,7 @@ public:
     explicit DevicePool(QObject *parent = nullptr);
     void createDevice(QString deviceName, deviceControlType control, deviceTypes dev);
 
-    QList<AudioDevice *> audioDevices;
+    QList<AudioLogic *> audioDevices;
     QList<DisplayLogic *> displayDevices;
     //QList<Device *> lightDevices;
 

@@ -25,7 +25,7 @@ public:
     AudioConfigurator(QObject *parent = nullptr);
     void setLanConfiguration(QString ipAddress, quint16 port);
     void setAuthorization(QString user, QString password);
-    AudioDevice *createAudioConfiguration(QString deviceName, AudioDeviceTypes type, AudioControlTypes control);
+    AudioDevice *createAudioConfiguration(QString deviceName, AudioDeviceTypes type, AudioControlTypes control, QObject *connectTo);
     void clearConfiguration();
     void setName(QString name);
 signals:

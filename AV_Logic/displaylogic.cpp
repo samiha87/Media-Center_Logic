@@ -30,4 +30,5 @@ void DisplayLogic::messageFromControl(QByteArray msg) {
 
 void DisplayLogic::statusChanged(QByteArray msg) {
     qDebug() << "DisplayLogic::statusChanged() " << msg;
+    emit newMessage(msg);
 }

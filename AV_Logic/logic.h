@@ -20,6 +20,7 @@ signals:
 
 public slots:
     void displayMessageParser(QByteArray msg);
+    void audioMessageParser(QByteArray msg);
     void messageParser(QByteArray msg);
 
 private:

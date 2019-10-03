@@ -12,6 +12,7 @@ class Amplifier : public QObject, public AudioDevice
 public:
     explicit Amplifier(QObject *parent = nullptr);
     void setName(QString name) override;
+    QString getName() override;
     void setPower(bool state) override;
     void togglePower() override;
     void setMute(bool state) override;
@@ -19,6 +20,9 @@ public:
     void volUp() override;
     void volDown() override;
     void setVol(int vol) override;
+    void toggleMute() override;
+
+    void setIR(IRDevice *ir);
 signals:
     virtual void statusChanged(QByteArray msg) override;
 

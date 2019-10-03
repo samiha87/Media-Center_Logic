@@ -1,11 +1,13 @@
 #include "irdevice.h"
 #include <QProcess>
-
+#include <qdebug.h>
 IRDevice::IRDevice()
 {
 
 }
-
+void IRDevice::setDeviceName(QString name) {
+    deviceName = name;
+}
 void IRDevice::sendCommand(IRCommands cmd) {
     // Device name is called internally in sendCmdToBash function
     switch (cmd) {
@@ -31,6 +33,7 @@ void IRDevice::sendCommand(IRCommands cmd) {
     }
     case IRAudioVolUp: {
         sendCmdToBash("AUDIO_VOL_UP");
+        //sendCmdToBash("KEY_UP");  // Testing purposes
         break;
     }
     case IRAudioVolDown: {
@@ -54,6 +57,7 @@ int IRDevice::getVolume() {
 }
 
 void IRDevice::sendCmdToBash(QString cmd) {
+    qDebug() << "IRDEvice::sendCmdToBash() " << cmd;
     QString command = "irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE "
             + deviceName + " " + cmd;
     QProcess::execute(command);
