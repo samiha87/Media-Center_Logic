@@ -21,6 +21,7 @@ void DevicePool::createDevice(QString deviceName, deviceControlType control, dev
 }
 
 void DevicePool::createLanDevice(QString deviceName, deviceTypes dev) {
+    qDebug() << "DevicePool::createLanDevice()";
     DisplayDevice *device;
     DisplayLogic *dLogic;
     AudioDevice *aDev;
@@ -36,7 +37,10 @@ void DevicePool::createLanDevice(QString deviceName, deviceTypes dev) {
         break;
     case eProjector:
         // Device name determines which type of control
+        qDebug() << "DevicePool::createLanDevice() Projector";
         dLogic = new DisplayLogic();
+        proj.setAuthorization("", "5233");
+        proj.setLanConfiguration("10.42.0.100", 0);
         device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::ePJLink, dLogic);
         dLogic->setDisplay(device);
         displayDevices.append(dLogic);

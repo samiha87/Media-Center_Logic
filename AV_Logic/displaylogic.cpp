@@ -12,6 +12,10 @@ void DisplayLogic::setDisplay(DisplayDevice *display) {
 
 void DisplayLogic::messageFromControl(QByteArray msg) {
     // Check if we have power command
+    if(device == nullptr) {
+        qDebug() << "DisplayLogic::messageFromControl() device not initialized";
+        return;
+    }
     qDebug() << "Logic::displayParser() " << msg;
     if(msg.contains("Pwr")) {
         if(msg.contains("On"))  {

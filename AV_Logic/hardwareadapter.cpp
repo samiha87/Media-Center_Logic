@@ -35,7 +35,6 @@ void HardwareAdapter::msgFromHardware(QByteArray msg) {
 }
 
 void HardwareAdapter::hardwareTx(QByteArray msg) {
-    qDebug() << msg;
     tcp->send(msg);
 }
 

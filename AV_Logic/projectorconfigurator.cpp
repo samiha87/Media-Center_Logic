@@ -36,12 +36,16 @@ void ProjectorConfigurator::clearConfiguration() {
 // Configure object here and return configured object to factory
 // Factory is only allowed to acces common functions
 DisplayDevice *ProjectorConfigurator::createProjectorConfiguration(QString deviceName, ProjectControlTypes type, QObject *connectTo) {
+    qDebug() << "ProjectorcConfigurator::createProjectorConfiguration()";
     PJLink *object;
     switch (type) {
     case (ePanasonic):
         break;
     case (ePJLink):
-        if(!lanConfigurationFlag) return nullptr;
+        if(!lanConfigurationFlag) {
+            qDebug() << "ProjectorcConfigurator::createProjectorConfiguration() Lan not configured";
+            return nullptr;
+        }
         object = new PJLink();
         if(instancePort > 0) qobject_cast<PJLink *>(object)->setPort(instancePort);
         qobject_cast<PJLink *>(object)->setAddress(instanceAddress);
@@ -49,6 +53,7 @@ DisplayDevice *ProjectorConfigurator::createProjectorConfiguration(QString devic
         clearConfiguration();
         QObject::connect(qobject_cast<PJLink *>(object), SIGNAL(statusChanged(QByteArray)), connectTo, SLOT(statusChanged(QByteArray)));
         // Connect to upper classes
+         qDebug() << "ProjectorcConfigurator::createProjectorConfiguration() Returning PJLink device";
         return static_cast<DisplayDevice *>(object);
     case (eRS232):
         break;
@@ -57,6 +62,7 @@ DisplayDevice *ProjectorConfigurator::createProjectorConfiguration(QString devic
     case (eVISCA_RS232):
         break;
     }
+     qDebug() << "ProjectorcConfigurator::createProjectorConfiguration() Failed, returning nullptr";
     return nullptr;
 }
 
