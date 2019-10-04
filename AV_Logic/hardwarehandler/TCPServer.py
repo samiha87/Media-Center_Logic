@@ -32,8 +32,7 @@ def ThreadedServer(host, port, icom_in, icom_out):
 					if data:
 						# Send tp queue
 						# Data from Qt app
-						print("Data from Qt: ")
-						print(data)
+                                                print("Data from Qt: " + data)
 						if("#HW,Vol" in data):
 							print("Processing volume")
 							hw_data = processMessage(data)
@@ -46,8 +45,7 @@ def ThreadedServer(host, port, icom_in, icom_out):
 				# Set non blocking
 					thread_data = icom_in.get(False)
 					if thread_data:
-						print("ThreadedServer__Data from queue")
-						print(thread_data)
+                                                print("ThreadedServer__Data from queue: " + thread_data)
 						conn.sendall(thread_data)
 				except:
 					thread_data = None	

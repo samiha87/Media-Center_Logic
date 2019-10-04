@@ -31,7 +31,7 @@ void DisplayLogic::messageFromControl(QByteArray msg) {
         qDebug() << "DisplayLogic::messageFromControl() device not initialized";
         return;
     }
-    qDebug() << "Logic::displayParser() " << msg;
+    qDebug() << "DisplayLogic::messageFromControl() " << msg;
     if(msg.contains("Pwr")) {
         if(msg.contains("On"))  {
             qDebug() << "DisplayLogic::messageFromControl() Truning projector on";
@@ -58,6 +58,12 @@ void DisplayLogic::messageFromControl(QByteArray msg) {
             break;
         }
     }
+    if(msg.contains("Preset=1")) {
+        device->loadPreset(DisplayDevice::DISPLAY_PRESET_1);
+    }
+    if(msg.contains("Preset=2")) {
+        device->loadPreset(DisplayDevice::DISPLAY_PRESET_2);
+    }
 }
 
 void DisplayLogic::statusChanged(QByteArray msg) {
@@ -69,5 +75,6 @@ void DisplayLogic::statusChanged(QByteArray msg) {
     if (msg.contains("Proj,Pwr,1") && !latestPowerRequest) {
         device->setPower(false);
     }
+
     emit newMessage(msg);
 }

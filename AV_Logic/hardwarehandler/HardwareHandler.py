@@ -35,15 +35,16 @@ def BluetoothServer(device, baud, icom_in, icom_out):
 		if bluetooth.inWaiting() > 0:
 			data_left = bluetooth.inWaiting()
 			# Read from bluetooth all bit
-			
 			received_data = bluetooth.read(data_left)
-			if "#" in received_data:
+                        if "#" in received_data and start_byte is False:
 				ble_buffer = ""
 				start_byte = True
 			if start_byte:
+                                print("Data from bluetooth: " + received_data)
 				ble_buffer += received_data
 				if "#" in ble_buffer and "*" in ble_buffer:
-					icom_out.put("BLE"+ ble_buffer)
+                                        print("Data from bluetooth sending forward: " + ble_buffer)
+                                        icom_out.put("BLE"+ ble_buffer)
 					start_byte = False
 					ble_buffer = ""	
 

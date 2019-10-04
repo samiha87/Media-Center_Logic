@@ -26,6 +26,7 @@ private:
     QObject *driver;
 
     bool latestPowerRequest;
+    int latestPresetRequest;
     DisplayDevice::DisplayChannels latestInputRequest;
 };
 

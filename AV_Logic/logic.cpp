@@ -6,7 +6,7 @@ Logic::Logic(QObject *parent) : QObject(parent)
 {
     // Create display
     devPool.createDevice("Hitachi", devPool.Ethernet, devPool.eProjector, devPool.eDriverHitachi);
-    devPool.createDevice("Sony", devPool.Ethernet, devPool.eProjector, devPool.eDriverPJLink);
+    //devPool.createDevice("Sony", devPool.Ethernet, devPool.eProjector, devPool.eDriverPJLink);
     // Create audio device
     //devPool.createDevice("OSMC", devPool.InfraRed, devPool.eAmplifier);
     // Create audio device which links to alreade created projector

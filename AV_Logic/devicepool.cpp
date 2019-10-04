@@ -55,9 +55,9 @@ void DevicePool::createLanDevice(QString deviceName, deviceTypes dev, driverType
         // If
         qDebug() << "DevicePool::createLanDevice() Projector";
         dLogic = new DisplayLogic();
-        proj.setLanConfiguration("10.42.0.100", 0);
         switch (driverType) {
         case eDriverPJLink:
+            proj.setLanConfiguration("10.42.0.101", 0);
             proj.setAuthorization("", "5233");
             device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::ePJLink, dLogic);
             break;
@@ -65,6 +65,7 @@ void DevicePool::createLanDevice(QString deviceName, deviceTypes dev, driverType
             device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::ePJLink, dLogic);
             break;
         case eDriverHitachi:
+            proj.setLanConfiguration("10.42.0.100", 0);
             device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::eHitachi, dLogic);
             break;
         case eDriverSony:

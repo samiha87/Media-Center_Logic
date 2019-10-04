@@ -59,17 +59,20 @@ void AudioLogic::statusChanged(QByteArray msg) {
 */
 void AudioLogic::displayStatusChanged(QByteArray msg) {
     qDebug() << "AudioLogic::displayStatusChanged() " << msg;
-
+    bool sendForward = false;
     if(msg.contains("Proj,Vol,Mute,1")) {
         msg.replace("Proj,Vol,Mute,1", "#r,Audio,Vol,Mute=On");
         msg.append("*");
+        sendForward = true;
     } else if(msg.contains("Proj,Vol,Mute,0")) {
         msg.replace("Proj,Vol,Mute,0", "#r,Audio,Vol,Mute=Off");
         msg.append("*");
+        sendForward = true;
     } else if(msg.contains("Proj,Vol")) {
         msg.replace("Proj,Vol,", "#r,Audio,Vol,Level=");
         msg.append("*");
+        sendForward = true;
     }
-    emit newMessage(msg);
+    if(sendForward) emit newMessage(msg);
 }
 

@@ -21,6 +21,7 @@ HITACHI_CP_WU8450::HITACHI_CP_WU8450(QObject *parent) : QObject(parent)
     projVolumeMute = false;
     volIncreasePoll = 0;
     volDecreasePoll = 0;
+    loadLensExecute = false;
 }
 
 void HITACHI_CP_WU8450::setPower(bool state) {
@@ -135,6 +136,7 @@ void HITACHI_CP_WU8450::toggleMute() {
 }
 
 void HITACHI_CP_WU8450::loadPreset(DisplayPreset preset) {
+    loadLensExecute = true;
     switch (preset) {
     case DISPLAY_PRESET_1:
         sendCommand(HITACHI_LOAD_LENS_1);
@@ -169,10 +171,11 @@ void HITACHI_CP_WU8450::sendCommand(HITACHI_CP_WU8450::HITACHI_COMMANDS cmd) {
     char SET_VOL_MUTE_OFF[] = {0xbe, 0xef, 0x03, 0x06, 0x00, 0x46, 0xd3, 0x01, 0x00, 0x02, 0x20, 0x00, 0x00};
     char REQUEST_VOL[]      = {0xbe, 0xef, 0x03, 0x06, 0x00, 0xcd, 0xc3, 0x02, 0x00, 0x50, 0x20, 0x00, 0x00};
     char REQUEST_VOL_MUTE[] = {0xbe, 0xef, 0x03, 0x06, 0x00, 0x75, 0xd3, 0x02, 0x00, 0x02, 0x20, 0x00, 0x00};
-    // Command,               Header-----------------------,----CRC----, --Action--,----Type----, Setting Code
-    char LOAD_LENS_1[]      = {0xbe, 0xef, 0x03, 0x06, 0x00, 0x4b, 0x92, 0x01, 0x00, 0x07, 0x24, 0x00, 0x00};
-    char LOAD_LENS_2[]      = {0xbe, 0xef, 0x03, 0x06, 0x00, 0xdb, 0x93, 0x01, 0x00, 0x07, 0x24, 0x01, 0x00};
-    char LOAD_LENS_3[]      = {0xbe, 0xef, 0x03, 0x06, 0x00, 0x2b, 0x93, 0x02, 0x00, 0x07, 0x24, 0x02, 0x00};
+    // Command,                       Header-----------------------,----CRC----, --Action--,----Type----, Setting Code
+    char LOAD_LENS_1[]              = {0xbe, 0xef, 0x03, 0x06, 0x00, 0x4b, 0x92, 0x01, 0x00, 0x07, 0x24, 0x00, 0x00};
+    char LOAD_LENS_2[]              = {0xbe, 0xef, 0x03, 0x06, 0x00, 0xdb, 0x93, 0x01, 0x00, 0x07, 0x24, 0x01, 0x00};
+    char LOAD_LENS_3[]              = {0xbe, 0xef, 0x03, 0x06, 0x00, 0x2b, 0x93, 0x02, 0x00, 0x07, 0x24, 0x02, 0x00};
+    char LOAD_LENS_EXECUTE[]        = {0xbe, 0xef, 0x03, 0x06, 0x00, 0xe8, 0x90, 0x06, 0x00, 0x08, 0x24, 0x00, 0x00};
     // Command,               Header------------------------,----CRC----, --Action--,----Type----, Setting Code
     char SET_BLANK_ON[]      = {0xbe, 0xef, 0x03, 0x06, 0x00, 0x6b, 0xd9, 0x01, 0x00, 0x20, 0x30, 0x01, 0x00};
     char SET_BLANK_OFF[]     = {0xbe, 0xef, 0x03, 0x06, 0x00, 0xfb, 0xd8, 0x01, 0x00, 0x20, 0x30, 0x00, 0x00};
@@ -226,13 +229,21 @@ void HITACHI_CP_WU8450::sendCommand(HITACHI_CP_WU8450::HITACHI_COMMANDS cmd) {
         send(QByteArray(reinterpret_cast<char *>(REQUEST_VOL), msgSize));
         break;
     case HITACHI_LOAD_LENS_1:
+        qDebug() << "HITACHI_CP_WU8450::sendCommand() Load lens 1";
         send(QByteArray(reinterpret_cast<char *>(LOAD_LENS_1), msgSize));
         break;
     case HITACHI_LOAD_LENS_2:
+        qDebug() << "HITACHI_CP_WU8450::sendCommand() Load lens 2";
         send(QByteArray(reinterpret_cast<char *>(LOAD_LENS_2), msgSize));
         break;
     case HITACHI_LOAD_LENS_3:
+        qDebug() << "HITACHI_CP_WU8450::sendCommand() Load lens 3";
         send(QByteArray(reinterpret_cast<char *>(LOAD_LENS_3), msgSize));
+        break;
+    case HITACHI_LOAD_LENS_EXECUTE:
+        loadLensExecute = false;
+        qDebug() << "HITACHI_CP_WU8450::sendCommand() Load lens execute";
+        send(QByteArray(reinterpret_cast<char *>(LOAD_LENS_EXECUTE), msgSize));
         break;
     case HITACHI_SET_BLANK_ON:
         send(QByteArray(reinterpret_cast<char *>(SET_BLANK_ON), msgSize));
@@ -294,6 +305,9 @@ void HITACHI_CP_WU8450::setAutheticationRequired(bool state) {
 
 void HITACHI_CP_WU8450::response(QByteArray msg) {
     qDebug() << "HITACHI_CP_WU8450::response() " << msg;
+    if(loadLensExecute) {
+        sendCommand(HITACHI_LOAD_LENS_EXECUTE);
+    }
     if(volIncreasePoll > 0) {
         volIncreasePoll--;
         sendCommand(HITACHI_SET_VOL_UP);

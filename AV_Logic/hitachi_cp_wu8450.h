@@ -65,6 +65,7 @@ private:
         HITACHI_LOAD_LENS_1,
         HITACHI_LOAD_LENS_2,
         HITACHI_LOAD_LENS_3,
+        HITACHI_LOAD_LENS_EXECUTE,
         HITACHI_SET_VOL_UP,
         HITACHI_SET_VOL_DOWN,
         HITACHI_SET_VOL_MUTE_ON,
@@ -125,6 +126,7 @@ private:
     HITACHI_COMMANDS latestRequest;
     int volIncreasePoll;
     int volDecreasePoll;
+    bool loadLensExecute;
 };
 
 #endif // HITACHI_CP_WU8450_H
