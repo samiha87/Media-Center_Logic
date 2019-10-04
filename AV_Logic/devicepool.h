@@ -33,10 +33,18 @@ public:
         eDisplay,
         eProjector,
         eLights,
+        eAudioViaProjector
+    };
+
+    enum driverTypes{
+        eDriverPJLink,
+        eDriverPanasonic,
+        eDriverHitachi,
+        eDriverSony
     };
 
     explicit DevicePool(QObject *parent = nullptr);
-    void createDevice(QString deviceName, deviceControlType control, deviceTypes dev);
+    void createDevice(QString deviceName, deviceControlType control, deviceTypes dev, driverTypes driverType);
 
     QList<AudioLogic *> audioDevices;
     QList<DisplayLogic *> displayDevices;
@@ -45,8 +53,8 @@ public:
 signals:
 
 private:
-    void createLanDevice(QString deviceName, deviceTypes dev);
-    void createRS232Device(QString deviceName, deviceTypes dev);
+    void createLanDevice(QString deviceName, deviceTypes dev, driverTypes driverType);
+    void createRS232Device(QString deviceName, deviceTypes dev, driverTypes driverType);
     void createIRDevice(QString deviceName, deviceTypes dev);
 public slots:
 };

@@ -8,6 +8,7 @@
 #include <QByteArray>
 #include <QTimer>
 #include "displaydevice.h"
+#include "AudioDevice.h"
 #include "tcpdevice.h"
 
 #include "tcpsocket.h"
@@ -58,6 +59,7 @@ public:
     void setAVMute(bool state);
     // Select projected input, choices in enum
     void setInput(DisplayChannels input) override;
+   // void setInput(AudioChannels channel) override();
     // Set projector ip address
     void setAddress(QString ip) override;
     // Return current ip address
@@ -72,6 +74,16 @@ public:
     void setPort(quint16 port_) override;
     // Return PJLink port address
     quint16 getPort();
+
+    void setName(QString name) override;
+    QString getName() override;
+
+    // Audio
+    void volUp() override;
+    void volDown() override;
+    void toggleMute() override;
+
+    void loadPreset(DisplayPreset preset) override;
 signals:
     void statusChanged(QByteArray msg) override;
     // Only for unit tests
@@ -83,6 +95,7 @@ public slots:
     void requestInput();
     void requestAVMute();
     void requestLamp();
+    void requestVol();
 private:
     QString ipAddress;
     QString password;
@@ -95,7 +108,11 @@ private:
     quint16 port;
     TCPSocket *sock;
 
-    void sendCommand(QString cmd);
+    void sendCommand(QString cmd, int version);
+    void authenticateVersion1(QByteArray msg);
+    void authenticateVersion2(QByteArray msg);
+    void parseVersion1(QByteArray msg);
+    void parseVersion2(QByteArray msg);
 
     QByteArray md5hash(QByteArray message);
 
@@ -103,6 +120,7 @@ private:
     bool powerState;
     int requestPoll;
     int projVolume = 0;
+    bool proVolumeMute;
     int projInput = 0;
     int projLamp = 0;
     bool requestedPowerState;

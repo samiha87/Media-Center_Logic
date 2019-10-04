@@ -6,21 +6,21 @@ DevicePool::DevicePool(QObject *parent) : QObject(parent)
 
 }
 
-void DevicePool::createDevice(QString deviceName, deviceControlType control, deviceTypes dev) {
+void DevicePool::createDevice(QString deviceName, deviceControlType control, deviceTypes dev, driverTypes driverType) {
     switch(control) {
     case InfraRed:
         createIRDevice(deviceName, dev);
         break;
     case RS232:
-        createRS232Device(deviceName, dev);
+        createRS232Device(deviceName, dev, driverType);
         break;
     case Ethernet:
-        createLanDevice(deviceName, dev);
+        createLanDevice(deviceName, dev, driverType);
         break;
     }
 }
 
-void DevicePool::createLanDevice(QString deviceName, deviceTypes dev) {
+void DevicePool::createLanDevice(QString deviceName, deviceTypes dev, driverTypes driverType) {
     qDebug() << "DevicePool::createLanDevice()";
     DisplayDevice *device;
     DisplayLogic *dLogic;
@@ -32,6 +32,16 @@ void DevicePool::createLanDevice(QString deviceName, deviceTypes dev) {
     case eAmplifier:
         // Create audio device, <deviceName> <Device type> <Control type>
         qDebug() << "DevicePool::createLanDevice() Amplifier";
+        switch (driverType) {
+            case eDriverPJLink:
+            break;
+        case eDriverPanasonic:
+            break;
+        case eDriverHitachi:
+            break;
+        case eDriverSony:
+            break;
+        }
         aLogic = new AudioLogic();
         aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifier, AudioConfigurator::eAudioIR, aLogic );
         aDev->setName(deviceName);
@@ -45,18 +55,47 @@ void DevicePool::createLanDevice(QString deviceName, deviceTypes dev) {
         // If
         qDebug() << "DevicePool::createLanDevice() Projector";
         dLogic = new DisplayLogic();
-        proj.setAuthorization("", "5233");
         proj.setLanConfiguration("10.42.0.100", 0);
-        device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::ePJLink, dLogic);
+        switch (driverType) {
+        case eDriverPJLink:
+            proj.setAuthorization("", "5233");
+            device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::ePJLink, dLogic);
+            break;
+        case eDriverPanasonic:
+            device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::ePJLink, dLogic);
+            break;
+        case eDriverHitachi:
+            device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::eHitachi, dLogic);
+            break;
+        case eDriverSony:
+            device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::ePJLink, dLogic);
+            break;
+        }
+        device->setName(deviceName);
         dLogic->setDisplay(device);
         displayDevices.append(dLogic);
         break;
     case eLights:
         break;
+    case eAudioViaProjector:
+        // Create audio device, <deviceName> <Device type> <Control type>
+        qDebug() << "DevicePool::createLanDevice() Amplifier";
+        aLogic = new AudioLogic();
+        // Check if current device exist as Display
+        bool found = false;
+        for(auto &c: displayDevices) {
+            if(c->getDisplay()->getName() == deviceName) {
+                QObject::connect(c, SIGNAL(newMessage(QByteArray)), aLogic, SLOT(displayStatusChanged(QByteArray)));
+                aLogic->setDisplayDevice(c->getDisplay());
+                found = true;
+            }
+        }
+        if(found) audioDevices.append(aLogic);
+        break;
     }
 }
 
-void DevicePool::createRS232Device(QString deviceName, deviceTypes dev) {
+void DevicePool::createRS232Device(QString deviceName, deviceTypes dev, driverTypes driverType) {
     switch(dev) {
     case eAmplifier:
         break;

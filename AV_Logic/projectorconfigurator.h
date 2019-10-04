@@ -7,6 +7,7 @@
 // Project Includes
 #include "pjlink.h"
 #include "displaydevice.h"
+#include "hitachi_cp_wu8450.h"
 
 class ProjectorConfigurator : public QObject
 {
@@ -14,6 +15,7 @@ public:
     enum ProjectControlTypes {
         ePanasonic,
         ePJLink,
+        eHitachi,
         eRS232,
         eVISCA_LAN,
         eVISCA_RS232

@@ -19,7 +19,7 @@ TCPSocket::TCPSocket(QObject *parent) : QObject(parent)
 void TCPSocket::connect(QString address, quint16 port) {
     if(socket == nullptr) return;
     socket->connectToHost(address, port);
-    qDebug() << "connecting...";
+    qDebug() << "TCPSocket::connect() " << address << " : " << QString::number(port);
     instanceAddress = address;
     instancePort = port;
     if(!socket->waitForConnected(5000)) {
@@ -43,7 +43,7 @@ void TCPSocket::send(QByteArray array) {
         reConnect();
     }
     if(socket->isOpen() && socket->isWritable()) {
-        qDebug() << "TCPSocket::send bytearray " << QString(array);
+        //qDebug() << "TCPSocket::send bytearray " << hex << array;
         socket->write(array);
     }
 }
@@ -59,7 +59,8 @@ void TCPSocket::reConnect() {
 }
 
 void TCPSocket::connected() {
-    qDebug() << "TCPSocket::connected()";
+    //qDebug() << "TCPSocket::connected()";
+    emit connectedToHost();
 }
 // If disconnects try reconnecting after 10 second
 // TODO check raspi qt modules, QTimer singleshot is missing
@@ -75,8 +76,6 @@ void TCPSocket::bytesWritten(qint64 bytes) {
 void TCPSocket::readyRead() {
     if(socket == nullptr) return;
     QByteArray hwResponse = socket->readAll();
-    qDebug() << "TCPSocket::readyRead() " << hwResponse;
+    //qDebug() << "TCPSocket::readyRead() " << hwResponse;
     emit response(hwResponse);
 }
-
-

@@ -5,7 +5,7 @@ VolumeHandler::VolumeHandler(QObject *parent) : QObject(parent)
     timer = new QTimer(this);
     currentDevice = eVolumeRaspberryHDMI;
     osmc.setAddress("10.42.0.232", 80);
-    setDefaults();
+    //setDefaults();
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(updateStatus()));
     timer->start(1000); // Update volume status to android app, every 5s
 }

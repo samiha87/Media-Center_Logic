@@ -1,4 +1,5 @@
 #include "projectorconfigurator.h"
+#include "displaylogic.h"
 
 ProjectorConfigurator::ProjectorConfigurator(QObject *parent) : QObject(parent)
 {
@@ -38,6 +39,7 @@ void ProjectorConfigurator::clearConfiguration() {
 DisplayDevice *ProjectorConfigurator::createProjectorConfiguration(QString deviceName, ProjectControlTypes type, QObject *connectTo) {
     qDebug() << "ProjectorcConfigurator::createProjectorConfiguration()";
     PJLink *object;
+    HITACHI_CP_WU8450 *hobject;
     switch (type) {
     case (ePanasonic):
         break;
@@ -51,10 +53,29 @@ DisplayDevice *ProjectorConfigurator::createProjectorConfiguration(QString devic
         qobject_cast<PJLink *>(object)->setAddress(instanceAddress);
         if(authConfigurationFlag) qobject_cast<PJLink *>(object)->setPassword(instancePassword);
         clearConfiguration();
+        qobject_cast<DisplayLogic *>(connectTo)->setDriver(object);
         QObject::connect(qobject_cast<PJLink *>(object), SIGNAL(statusChanged(QByteArray)), connectTo, SLOT(statusChanged(QByteArray)));
         // Connect to upper classes
          qDebug() << "ProjectorcConfigurator::createProjectorConfiguration() Returning PJLink device";
         return static_cast<DisplayDevice *>(object);
+    case (eHitachi):
+        if(!lanConfigurationFlag) {
+            qDebug() << "ProjectorcConfigurator::createProjectorConfiguration() Lan not configured";
+            return nullptr;
+        }
+        hobject = new HITACHI_CP_WU8450();
+        if(instancePort > 0) hobject->setPort(instancePort);
+        hobject->setAddress(instanceAddress);
+        if(authConfigurationFlag) {
+            hobject->setAutheticationRequired(true);
+            hobject->setPassword(instancePassword);
+        }
+        clearConfiguration();
+        qobject_cast<DisplayLogic *>(connectTo)->setDriver(hobject);
+        QObject::connect(hobject, SIGNAL(statusChanged(QByteArray)), connectTo, SLOT(statusChanged(QByteArray)));
+        // Connect to upper classes
+         qDebug() << "ProjectorcConfigurator::createProjectorConfiguration() Returning Hitachi device";
+        return static_cast<DisplayDevice *>(hobject);
     case (eRS232):
         break;
     case (eVISCA_LAN):

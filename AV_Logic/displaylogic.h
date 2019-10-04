@@ -10,6 +10,9 @@ class DisplayLogic : public QObject
 public:
     explicit DisplayLogic(QObject *parent = nullptr);
     void setDisplay(DisplayDevice *display);
+    void setDriver(QObject *object);
+    QObject *getDriver();
+    DisplayDevice *getDisplay();
     void messageFromControl(QByteArray msg);
 
 signals:
@@ -19,7 +22,11 @@ public slots:
     void statusChanged(QByteArray msg);
 
 private:
-      DisplayDevice *device;
+    DisplayDevice *device;
+    QObject *driver;
+
+    bool latestPowerRequest;
+    DisplayDevice::DisplayChannels latestInputRequest;
 };
 
 #endif // DISPLAYLOGIC_H

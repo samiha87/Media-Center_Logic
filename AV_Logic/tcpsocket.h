@@ -27,6 +27,7 @@ public slots:
 signals:
     // Emit a response signal when message retrieved from socket
     void response(QByteArray array);
+    void connectedToHost();
 private:
     QTcpSocket *socket;
     QTimer *timer;
