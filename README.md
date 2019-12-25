@@ -2,7 +2,9 @@
 CMake compiles and building software succeeeds. When running software on RPI immediate segmentation fault appears.
 When building with Qt Compiler with same arm compiler, software runs without issues.
 TODO is the issue with linking libraries?
+# Raspbian
 
+# OSMC
 OSMC control: https://github.com/bwssytems/ha-bridge/wiki/Kodi-volume-control
 # Cartracker_AVControl
 Raspberry Pi running with Qt, controls AV systems
