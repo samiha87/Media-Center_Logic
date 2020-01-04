@@ -68,8 +68,8 @@ $ sudo apt-get build-dep qtbase-opensource-src
 $ sudo apt-get install libegl1-mesa libegl1-mesa-dev libgles2-mesa libgles2-mesa-dev
 ```
 6. Make target directory
-  6.1 sudo mkdir /usr/local/qt5pi
-  6.2 chown pi:pi /usr/local/qt5pi
+- sudo mkdir /usr/local/qt5pi
+- chown pi:pi /usr/local/qt5pi
   
 ### Host side
 7. Create a working dir and download toolset
@@ -89,8 +89,8 @@ $ rsync -avz pi@raspberrypi.local:/opt/vc sysroot/opt
 9. Set systemlinks
 ```shell
 $ wget https://raw.githubusercontent.com/Kukkimonsuta/rpi-buildqt/master/scripts/utils/sysroot-relativelinks.py
-$chmod +x sysroot-relativelinks.py
-$./sysroot-relativelinks.py sysroot
+$ chmod +x sysroot-relativelinks.py
+$ ./sysroot-relativelinks.py sysroot
 ```
 10. Download and configure Qt for Raspberry Pi. Download 5.10 due it has been tested with Raspberry Pi 1 and device is set as linux-rasp-pi-g++ Raspberry version 1.
 ```shell
