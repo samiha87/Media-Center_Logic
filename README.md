@@ -295,6 +295,8 @@ open multimedia module folder
 ..raspi/qt5/bin/qmake -r GST_VERSION=1.0
 
 # References
-1.https://wiki.qt.io/RaspberryPi2EGLFS#Qt_Creator
-2.https://github.com/bwssytems/ha-bridge/wiki/Kodi-volume-control
+1. https://wiki.qt.io/RaspberryPi2EGLFS#Qt_Creator
+2. https://github.com/bwssytems/ha-bridge/wiki/Kodi-volume-control
+3. https://wiki.qt.io/RaspberryPi2EGLFS
+4. https://pimylifeup.com/raspberry-pi-spotify/
 
