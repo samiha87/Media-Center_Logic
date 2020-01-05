@@ -171,7 +171,7 @@ cmake -DCMAKE_SKIP_BUILD_RPATH=FALSE -DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE -DCMA
 libicui18.so caused trouble, thus sticking with older versions.
 Compailer and libraries of Raspberry pi did not match.
 
-1. Download raspberry image 2015-09-24
+1. Download latest raspberry image
 2. DD image to SD-Card with Balena Etcher
 
 ### RPI side
