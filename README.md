@@ -96,7 +96,7 @@ $ ./sysroot-relativelinks.py sysroot
 ```shell
 $ git clone git://code.qt.io/qt/qtbase.git -b 5.10
 $ cd qtbase
-$ ./configure -release -opengl es2 -device linux-rasp-pi-g++ -device-option CROSS_COMPILE=~/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -make libs -prefix /usr/local/qt5pi -no-use-gold-linker
+$ ./configure -release -opengl es2 -device linux-rasp-pi-g++ -device-option CROSS_COMPILE=~/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -make libs -prefix /usr/local/qt5pi -no-use-gold-linker -extprefix ~/raspi/qt5pi -hostprefix ~/raspi/qt5 -v 
 $ make
 $ make install
 ```
@@ -112,13 +112,17 @@ $ ~/raspi/qt5/bin/qmake
 $ make
 $ scp qopenglwidget pi@raspberrypi.local:/home/pi
 ```
-13. Connect to raspberr, links to qt libs and run program 
+13. Connect to raspberry, links to qt libs and run program 
 ```shell
 $ ssh user@ip -X
 $ echo /usr/local/qt5pi/lib | sudo tee /etc/ld.so.conf.d/qt5pi.conf
 $ sudo ldconfig
 $ ./qopenglwidget
 ```
+14. Update to latest distro
+- sudo apt-get update
+- sudo apt-get upgrade
+
 ## Video playing
 To run Qt Video player install all gstreamer-0.10 packages. Otherwise will complain Gstreamer missing plugin.
 sudo apt-get install h264enc. Couldnt figure this
