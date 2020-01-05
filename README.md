@@ -2,7 +2,44 @@
 CMake compiles and building software succeeeds. When running software on RPI immediate segmentation fault appears.
 When building with Qt Compiler with same arm compiler, software runs without issues.
 TODO is the issue with linking libraries?
+
+# Drivers
+## Onkyo TX-NR900E
+
+Onkyo TX-NR900E
+[CR] = 0x0D
+Power
+!1PWR01[CR]
+!1PWR00[CR]
+!1PWRQSTN[CR] -> !1PWR01<0x1a>
+Testing RS232 commands through USB-RS232
+On pi setup rs232 port to baud 9600, 8 databits, parity none, 1 stop bits  
+	stty -F /dev/ttyUSB0 speed 9600 cs8 -cstopb -parenb
+	echo '!1PWR00' > /dev/ttyUSB0 to power on
+	echo '!1PWR01' > /dev/ttyUSB0 to power off
+  
+# Install Spotify
+sudo apt-get update 
+sudo apt-get upgrade
+
+sudo apt install -y apt-transport-https curl
+curl -sSL https://dtcooper.github.io/raspotify/key.asc | sudo apt-key add -v -
+echo 'deb https://dtcooper.github.io/raspotify raspotify main' | sudo tee /etc/apt/sources.list.d/raspotify.list
+
+sudo apt update
+sudo apt install raspotify
+
+Configure spotify
+
+sudo nano /etc/default/raspotify
+Uncomment DEVICE_NAME="raspotify" and change raspotify to what you want device to be called
+Uncomment OPTIONS="--username <USERNAME> --password <PASSWORD>" Change username and password to your Spotify credentials
+Apply changes by sudo systemctl restart raspotify or by rebooting raspberry
+
+If you want to adjust audio on Raspberry via terminal, type alsamixer. This opens audio settings on terminal, works over ssh.
+
 # Raspbian edited version for QT 5.12.6
+
 # Cartracker_AVControl
 Raspberry Pi running with Qt, controls AV systems
 1.Download OSMC for Raspberry https://osmc.tv/download/
