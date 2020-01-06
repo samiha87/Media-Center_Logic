@@ -7,6 +7,7 @@ TODO is the issue with linking libraries?
 ## Onkyo TX-NR900E
 
 [CR] = 0x0D
+
 Power
 - !1PWR01[CR]
 - !1PWR00[CR]
