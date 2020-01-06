@@ -13,7 +13,7 @@ Power
 - !1PWR00[CR]
 - !1PWRQSTN[CR] -> !1PWR01<0x1a>
 Testing RS232 commands through USB-RS232
-- On pi setup rs232 port to baud 9600, 8 databits, parity none, 1 stop bits  
+On pi setup rs232 port to baud 9600, 8 databits, parity none, 1 stop bits  
 - stty -F /dev/ttyUSB0 speed 9600 cs8 -cstopb -parenb
 - echo '!1PWR00' > /dev/ttyUSB0 to power on
 - echo '!1PWR01' > /dev/ttyUSB0 to power off
