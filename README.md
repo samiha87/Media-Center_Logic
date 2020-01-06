@@ -19,22 +19,22 @@ On pi setup rs232 port to baud 9600, 8 databits, parity none, 1 stop bits
 	echo '!1PWR01' > /dev/ttyUSB0 to power off
   
 # Install Spotify
-sudo apt-get update 
-sudo apt-get upgrade
+- sudo apt-get update 
+- sudo apt-get upgrade
 
-sudo apt install -y apt-transport-https curl
-curl -sSL https://dtcooper.github.io/raspotify/key.asc | sudo apt-key add -v -
-echo 'deb https://dtcooper.github.io/raspotify raspotify main' | sudo tee /etc/apt/sources.list.d/raspotify.list
+- sudo apt install -y apt-transport-https curl
+- curl -sSL https://dtcooper.github.io/raspotify/key.asc | sudo apt-key add -v -
+- echo 'deb https://dtcooper.github.io/raspotify raspotify main' | sudo tee /etc/apt/sources.list.d/raspotify.list
 
-sudo apt update
-sudo apt install raspotify
+- sudo apt update
+- sudo apt install raspotify
 
-Configure spotify
+## Configure spotify
 
-sudo nano /etc/default/raspotify
-Uncomment DEVICE_NAME="raspotify" and change raspotify to what you want device to be called
-Uncomment OPTIONS="--username <USERNAME> --password <PASSWORD>" Change username and password to your Spotify credentials
-Apply changes by sudo systemctl restart raspotify or by rebooting raspberry
+- sudo nano /etc/default/raspotify
+- Uncomment DEVICE_NAME="raspotify" and change raspotify to what you want device to be called
+- Uncomment OPTIONS="--username <USERNAME> --password <PASSWORD>" Change username and password to your Spotify credentials
+- Apply changes by sudo systemctl restart raspotify or by rebooting raspberry
 
 If you want to adjust audio on Raspberry via terminal, type alsamixer. This opens audio settings on terminal, works over ssh.
 
