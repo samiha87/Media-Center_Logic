@@ -21,7 +21,6 @@ QObject *DisplayLogic::getDriver() {
 }
 
 DisplayDevice *DisplayLogic::getDisplay() {
-
     return device;
 }
 
@@ -31,6 +30,8 @@ void DisplayLogic::messageFromControl(QByteArray msg) {
         qDebug() << "DisplayLogic::messageFromControl() device not initialized";
         return;
     }
+    // Check if correct proj
+
     qDebug() << "DisplayLogic::messageFromControl() " << msg;
     if(msg.contains("Pwr")) {
         if(msg.contains("On"))  {
@@ -46,7 +47,7 @@ void DisplayLogic::messageFromControl(QByteArray msg) {
     // Proj,Inpt,<int>*
     if(msg.contains("Inpt")) {
         qDebug() << "DisplayLogic::messageFromControl() Truning projector on";
-        msg.replace("Proj,inpt=", "");
+        msg.replace("inpt=", "");
         msg.chop('*');
         int choice = msg.toInt();
         latestInputRequest = static_cast<DisplayDevice::DisplayChannels>(choice);
@@ -69,12 +70,11 @@ void DisplayLogic::messageFromControl(QByteArray msg) {
 void DisplayLogic::statusChanged(QByteArray msg) {
     qDebug() << "DisplayLogic::statusChanged() " << msg;
     // Analyze
-    if(msg.contains("Proj,Pwr,0") && latestPowerRequest) {
+    if(msg.contains("Pwr,0") && latestPowerRequest) {
         device->setPower(true);
     }
-    if (msg.contains("Proj,Pwr,1") && !latestPowerRequest) {
+    if (msg.contains("Pwr,1") && !latestPowerRequest) {
         device->setPower(false);
     }
-
     emit newMessage(msg);
 }

@@ -57,7 +57,7 @@ void DevicePool::createLanDevice(QString deviceName, deviceTypes dev, driverType
         dLogic = new DisplayLogic();
         switch (driverType) {
         case eDriverPJLink:
-            proj.setLanConfiguration("10.42.0.101", 0);
+            proj.setLanConfiguration("10.42.0.100", 0);
             proj.setAuthorization("", "5233");
             device = proj.createProjectorConfiguration(deviceName, ProjectorConfigurator::ePJLink, dLogic);
             break;

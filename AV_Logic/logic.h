@@ -39,6 +39,9 @@ private:
     // Timer is started when projector is detected open.
     // After x amount of time projector will automatically be shutdown
     QTimer *shutdownTimer;
+
+    void loadPreset(int preset);
+    int instancePreset;
 };
 
 #endif // LOGIC_H

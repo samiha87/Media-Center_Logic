@@ -28,6 +28,7 @@ Logic::Logic(QObject *parent) : QObject(parent)
     // Connect Volume Handler to hardware tx
    // QObject::connect(volHandler, SIGNAL(volumeChanged(QByteArray)), hwAdapter, SLOT(hardwareTx(QByteArray)));
     qDebug() << "Logic:: Starting()";
+    instancePreset = 0;
 }
 
 QByteArray Logic::makeMessage(QByteArray input) {
@@ -57,13 +58,15 @@ void Logic::audioMessageParser(QByteArray msg) {
     //QByteArray builtMsg = makeMessage(msg); // Turn message into correct format for hardware layer
     emit hardwareTx(msg);
 }
+void Logic::loadPreset(int preset) {
+    instancePreset = preset;
+}
 
 void Logic::messageParser(QByteArray msg) {
     qDebug() << "Logic::messageParser() " << msg;
-    if(msg.contains("Proj")) {
-        msg = msg.remove(0,4);// Remove #Proj
-        for(auto &a: devPool.displayDevices) {
-            a->messageFromControl(msg);
+    if(msg.contains("Proj=")) {
+        for(auto &c : devPool.displayDevices) {
+            c->messageFromControl(msg);
         }
     }
 
@@ -73,7 +76,7 @@ void Logic::messageParser(QByteArray msg) {
         for(auto &a: devPool.audioDevices) {
             a->messageFromControl(msg);
         }
-        //volumeParser(msg);
+        //volumeParser(msg); 2300€ + to 2000€
     }
 }
 
