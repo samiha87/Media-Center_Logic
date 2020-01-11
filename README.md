@@ -134,6 +134,33 @@ Trying to compile qt multimeida module wiht gstreamer 1.0
 open multimedia module folder
 ..raspi/qt5/bin/qmake -r GST_VERSION=1.0
 
+## Configure with Qt Creator
+- Go to options -> Devices
+  - Add
+    - Generic Linux Device
+    - Enter IP address, user & password
+    - Finish
+- Go to options -> Compilers
+  - Add
+    - GCC
+    - Compiler path: ~/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-g++
+- Go to options -> Debuggers
+  - Add
+    - ~/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm-linux-gnueabihf-gdb
+- Go to options -> Qt Versions
+  - Check if an entry with ~/raspi/qt5/bin/qmake shows up. If not, add it
+- Go to options -> Kits -> Kits
+  - Add
+    - Generic Linux Device
+    - Device: The one you just created
+    - Sysroot: /home/user/raspi/sysroot
+    - Compiler: C++: Raspberry Pi 1, C++
+    - Debugger: One we just created
+    - Qt Version: One we created. In case of Raspberry Pi 1, 5.10.1
+    
+ ## QtSerial module to raspberry
+ 
+  ### reference https://wiki.qt.io/RaspberryPi2EGLFS#Qt_Creator
 -----------------------------------------------OLD---------------------------------------------------------------------
 # OSMC
 OSMC control: https://github.com/bwssytems/ha-bridge/wiki/Kodi-volume-control
