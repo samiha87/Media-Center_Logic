@@ -21,6 +21,10 @@ void Amplifier::togglePower() {
     irDevice->sendCommand(IRDevice::IRGPowerToggle);
 }
 
+bool Amplifier::getPower() {
+    return true;
+}
+
 void Amplifier::setVol(int vol) {
     Q_UNUSED(vol)
 }

@@ -97,6 +97,7 @@
 #define MODE_WRAP_AROUND_AUTO                           "AUTO"
 #define MODE_WRAP_AROUND_SURROUND                       "SURR"
 #define MODE_WRAP_AROUND_STEREO                         "STEREO"
+
 // Inputs
 #define INPUT                                           "SLI"
 #define INPUT_VIDEO1                                    "00"

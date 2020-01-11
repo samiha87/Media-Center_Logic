@@ -7,7 +7,7 @@ RS232Device::RS232Device(QObject *parent) : QObject(parent)
     parityBits = QSerialPort::NoParity;     // None
     stopBits = QSerialPort::OneStop;        // Stop bits 1
 
-    connect(serial, &QSerialPort::readyRead, this, &RS232Device::readData);
+    QObject::connect(serial, SIGNAL(readyRead(QByteArray)), this, SLOT(readData(QByteArray)));
 }
 
 void RS232Device::setPort(QString rsPort)
@@ -30,6 +30,11 @@ void RS232Device::setStop(QSerialPort::StopBits stop_)
     stopBits = stop_;
 }
 
+void RS232Device::setDataBits(QSerialPort::DataBits databits_)
+{
+    dataBits = databits_;
+}
+
 void RS232Device::setFlowControl(QSerialPort::FlowControl flowControl_)
 {
     flowControl = flowControl_;
@@ -37,6 +42,11 @@ void RS232Device::setFlowControl(QSerialPort::FlowControl flowControl_)
 void RS232Device::send(QByteArray msg)
 {
     sendToDevice(msg);
+}
+
+void RS232Device::readData(QByteArray msg)
+{
+    emit received(msg);
 }
 
 void RS232Device::sendToDevice(const QByteArray &msg)

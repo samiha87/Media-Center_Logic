@@ -8,6 +8,7 @@ public:
     enum AudioChannels {
        Channel_CD,
        Channel_DVD,
+       Channel_PHONO,
        Channel_NONE
    };
 

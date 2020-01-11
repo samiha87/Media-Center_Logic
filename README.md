@@ -158,6 +158,12 @@ open multimedia module folder
     - Debugger: One we just created
     - Qt Version: One we created. In case of Raspberry Pi 1, 5.10.1
     
+- If having issues with permissions when deploying
+ - Connect to rpi
+ - cd /opt/
+ - sudo mkdir AV_Logic
+ - sudo chown pi:pi AV_Logic
+
  ## QtSerial module to raspberry
  - Link to the repo https://code.qt.io/cgit/qt/qtserialport.git/
  - On terminal go to your raspberry folder on host.

@@ -2,8 +2,10 @@
 #define ONKYO_AMP_RS232_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "AudioDevice.h"
+#include "rs232device.h"
 
 class Onkyo_AMP_RS232 : public QObject, public AudioDevice
 {
@@ -26,6 +28,18 @@ public:
 
 signals:
     void statusChanged(QByteArray msg) override;
+private:
+    RS232Device serial;
+    QTimer timer;
+    bool devicePower = false;
+    bool deviceMute = false;
+
+    int requestStatusPoll = 0;
+    QByteArray generateCommand(QByteArray cmd, QByteArray parameter);
+private slots:
+    void fromDevice(QByteArray msg);
+    void requestStatus();
+
 };
 
 #endif // ONKYO_TX_NR_900_H

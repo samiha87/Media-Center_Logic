@@ -15,6 +15,7 @@ public:
     QString getName() override;
     void setPower(bool state) override;
     void togglePower() override;
+    bool getPower() override;
     void setMute(bool state) override;
     void setInput(AudioChannels channel) override;
     void volUp() override;
