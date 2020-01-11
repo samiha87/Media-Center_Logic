@@ -159,7 +159,14 @@ open multimedia module folder
     - Qt Version: One we created. In case of Raspberry Pi 1, 5.10.1
     
  ## QtSerial module to raspberry
- 
+ - Link to the repo https://code.qt.io/cgit/qt/qtserialport.git/
+ - On terminal go to your raspberry folder on host.
+ - git clone git://code.qt.io/qt/qtserialport.git -b 5.10
+ - ~/raspi_raspbian/qtbase/bin/qmake
+ - make
+ - make install
+ - cd ..
+ -rsync -avz qt5pi pi@10.42.0.2:/usr/local 
   ### reference https://wiki.qt.io/RaspberryPi2EGLFS#Qt_Creator
 -----------------------------------------------OLD---------------------------------------------------------------------
 # OSMC
