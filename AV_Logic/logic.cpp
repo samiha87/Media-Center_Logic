@@ -15,6 +15,7 @@ Logic::Logic(QObject *parent) : QObject(parent)
    // devPool.createDevice("Dummy", devPool.Ethernet, devPool.eLights);
 
     hwAdapter = new HardwareAdapter(this);
+
     volHandler = new VolumeHandler(this);
     shutdownTimer = new QTimer(this);
 

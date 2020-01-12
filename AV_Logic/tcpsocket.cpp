@@ -6,6 +6,8 @@ TCPSocket::TCPSocket(QObject *parent) : QObject(parent)
     socket = nullptr;
     instanceAddress = "";
     instancePort = 0;
+    reconnect = false;
+    instanceInterval = 0;
     timer = new QTimer(this);
     socket = new QTcpSocket(this);
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(reConnect()));
@@ -24,7 +26,7 @@ void TCPSocket::connect(QString address, quint16 port) {
     instancePort = port;
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
-       // QTimer::singleShot(10000, this, SLOT(reCreateConnection()));
+        if(reconnect) QTimer::singleShot(instanceInterval, this, SLOT(reConnect()));
         if(socket != nullptr) {
             // Recreate connection after x amount of time
         }
@@ -53,13 +55,19 @@ void TCPSocket::close() {
         socket->close();
 }
 
+void TCPSocket::enableReconnect(int interval)
+{
+    reconnect = true;
+    instanceInterval = interval;
+}
+
 // SLOTS
 void TCPSocket::reConnect() {
     connect(instanceAddress, instancePort);
 }
 
 void TCPSocket::connected() {
-    //qDebug() << "TCPSocket::connected()";
+    qDebug() << "TCPSocket::connected() " << instanceAddress;
     emit connectedToHost();
 }
 // If disconnects try reconnecting after 10 second

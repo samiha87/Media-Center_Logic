@@ -29,8 +29,18 @@ void HardwareAdapter::msgFromHardware(QByteArray msg) {
         qDebug() << "Message: " << msg;
         msg = msg.remove(0, 4); // Remove #BLE from message
         msg.chop(1);    // Remove end byte * from array
-        qDebug() << "HardwareAdapter::msgFromHardware() sending " << msg;
+        qDebug() << "HardwareAdapter::msgFromHardware(), Bluetooth sending " << msg;
         emit bleMessageRx(msg);
+    }
+
+    // Check message type
+    if(msg.contains("TCP")) {
+        qDebug() << "HardwareAdapter::msgFromHardware() TCP message received";
+        qDebug() << "Message: " << msg;
+        msg = msg.remove(0, 4); // Remove #TCP from message
+        msg.chop(1);    // Remove end byte * from array
+        qDebug() << "HardwareAdapter::msgFromHardware(), TCP sending " << msg;
+        emit tcpMessageRx(msg);
     }
 }
 
@@ -43,18 +53,21 @@ void HardwareAdapter::startHardwareLayer()
 {
     stopHardwareLayer();
     QString path = "/opt/hardwarehandler/";
+    tcp->enableReconnect(10000);
     qDebug() << "HardwareAdapter::startHardwareLayer() " << path;
     QString  command("python");
     QStringList params = QStringList() << "/opt/hardwarehandler/HardwareHandler.py";
     process = new QProcess(this);
     qDebug() << "HardwareAdapter::starting QProcess";
     process->startDetached(command, params, path, nullptr);
-    process->waitForReadyRead(10000);
+    process->waitForReadyRead(30000);
     qDebug() << "HardwareAdapter::startHardwareLayer() " << process->readAll();
     // Connect to hardware layer
     process->close();
     process->deleteLater();
-    tcp->connect("localhost", 10000);
+    qDebug() << "HardwareAdapter::startHardwareLayer() Connecting to hardwarelayer";
+    tcp->connect("127.0.0.1", 10000);
+
 }
 
 void HardwareAdapter::stopHardwareLayer()

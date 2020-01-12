@@ -15,6 +15,7 @@ public:
 
 signals:
     void bleMessageRx(QByteArray msg);
+    void tcpMessageRx(QByteArray msg);
 public slots:
     // SLot is for receiveng mesages from hardware layer
     void msgFromHardware(QByteArray msg);

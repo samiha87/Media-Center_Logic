@@ -16,6 +16,7 @@ public:
     void send(QByteArray array);
     // Close socket connection
     void close();
+    void enableReconnect(int interval);
 
 public slots:
     void reConnect();
@@ -34,6 +35,8 @@ private:
 
     QString instanceAddress;
     quint16 instancePort;
+    int instanceInterval;
+    bool reconnect;
 };
 
 #endif // TCPSOCKET_H
