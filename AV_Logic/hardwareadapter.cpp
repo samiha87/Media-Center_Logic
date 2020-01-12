@@ -39,11 +39,13 @@ void HardwareAdapter::hardwareTx(QByteArray msg) {
 }
 
 // Start a python based hardware layer -> This is not best way to do this
-void HardwareAdapter::startHardwareLayer() {
-  /*  QString path = "/opt/hardwarelayer/";
+void HardwareAdapter::startHardwareLayer()
+{
+    stopHardwareLayer();
+    QString path = "/opt/hardwarehandler/";
     qDebug() << "HardwareAdapter::startHardwareLayer() " << path;
     QString  command("python");
-    QStringList params = QStringList() << "HardwareHandler.py";
+    QStringList params = QStringList() << "/opt/hardwarehandler/HardwareHandler.py";
     process = new QProcess(this);
     qDebug() << "HardwareAdapter::starting QProcess";
     process->startDetached(command, params, path, nullptr);
@@ -51,21 +53,18 @@ void HardwareAdapter::startHardwareLayer() {
     qDebug() << "HardwareAdapter::startHardwareLayer() " << process->readAll();
     // Connect to hardware layer
     process->close();
-    process->deleteLater(); */
+    process->deleteLater();
     tcp->connect("localhost", 10000);
 }
 
-void HardwareAdapter::stopHardwareLayer() {
-    QString path = "/opt/hardwarelayer/";
-    qDebug() << "HardwareAdapter::stopHardwarelayer() ";
-    QString  command("sh");
-    QStringList params = QStringList() << "kill $(ps aux | grep '[p]ython csp_build.py' | awk '{print $2}')";
-    process = new QProcess(this);
-    qDebug() << "HardwareAdapter::starting QProcess";
-    process->startDetached(command, params, path, nullptr);
-    process->waitForFinished();
-    qDebug() << "HardwareAdapter::startHardwareLayer() " << process->readAll();
-    // Connect to hardware layer
-    process->close(); // Kills the process
-    process->deleteLater();
+void HardwareAdapter::stopHardwareLayer()
+{
+    QProcess killHW;
+    qDebug() << "HardwareAdapter::stopHardwarelayer()";
+    killHW.start("sh", QStringList()<< "-c" << "kill -9 $(ps aux | grep hardwarehandler | awk '{print $2}')");
+    if(!killHW.waitForStarted()) qDebug() << "HardwareAdapter::stopHardwareLayer() Failed to open process";
+    killHW.waitForFinished();
+    killHW.close();
+
+
 }
