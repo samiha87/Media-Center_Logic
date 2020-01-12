@@ -54,12 +54,29 @@ def BluetoothServer(device, baud, icom_in, icom_out):
 def ThreadedTCPControlServer(host, port, icon_in, icom_out):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))
+    tcp_start_byte = False
+    t0 = 0;
+
     while True:
         s.listen(1)
         conn, addr = s.accept()
         conn.setblocking(0)
+        t0 = time.time()
         print("HardwareHandler::ThreadedTCPControlServer() Connected")
         if conn:
+            # Connection test
+            # Add connection test, if connection lost close current connection and go to listening mode
+            if t0 < time.time() -  5 :	# Every 5 seconds check connection
+                t0 = time.time()
+                try:
+                    conn.send("test")
+                except socket.error, e:
+
+                    print("TCPServer, ThreadedTCPControlServer() Connection lost")
+                    conn.close() # Close socket and exit while loop
+                    # Wait until new connection is established
+                    break
+
             while True:
                 # Data from local host
                 try:
@@ -74,16 +91,16 @@ def ThreadedTCPControlServer(host, port, icon_in, icom_out):
                     data = conn.recv(1024)
                     if data:
                         print("HardwareHandler::ThreadedTCPControlServer() Data from Control: " + data)
-                        if "#" in data and start_byte is False:
+                        if "#" in data and tcp_start_byte is False:
                             controlBuffer = ""
-                            start_byte = True
-                        if start_byte:
+                            tcp_start_byte = True
+                        if tcp_start_byte:
                             print("HardwareHandler::ThreadedTCPControlServer() Data from control: " + data)
-                            controlBuffer += received_data
+                            controlBuffer += data
                             if "#" in controlBuffer and "*" in controlBuffer:
                                 print("HardwareHandler::ThreadedTCPControlServer() Sending forward: " + controlBuffer)
-                                icom_out.put("TCP"+ controlBuffer)
-                                start_byte = False
+                                icom_out.put("TCP" + controlBuffer)
+                                tcp_start_byte = False
                                 controlBuffer = ""
                 except:
                     data = None

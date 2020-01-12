@@ -67,7 +67,6 @@ void HardwareAdapter::startHardwareLayer()
     process->deleteLater();
     qDebug() << "HardwareAdapter::startHardwareLayer() Connecting to hardwarelayer";
     tcp->connect("127.0.0.1", 10000);
-
 }
 
 void HardwareAdapter::stopHardwareLayer()
@@ -78,6 +77,4 @@ void HardwareAdapter::stopHardwareLayer()
     if(!killHW.waitForStarted()) qDebug() << "HardwareAdapter::stopHardwareLayer() Failed to open process";
     killHW.waitForFinished();
     killHW.close();
-
-
 }
