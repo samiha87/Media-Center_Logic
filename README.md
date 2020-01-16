@@ -7,11 +7,12 @@ TODO is the issue with linking libraries?
 ## Smart bulbs
 ## Deltaco SH-LE27W - On progress
 
-GPIO #	Component
-
-GPIO00 	None
-
-GPIO01 	None
+|GPIO |Component|
+|-------|---------|
+|GPIO00 | 	None  |
+|-------|---------|
+|GPIO01 | 	None  |
+|-------|---------|
 
 GPIO02 	None
 GPIO03 	None
