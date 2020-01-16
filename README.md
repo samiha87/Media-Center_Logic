@@ -7,7 +7,8 @@ TODO is the issue with linking libraries?
 ## Smart bulbs
 ## Deltaco SH-LE27W - On progress
 
-Details for configuring flashed tasmoto
+Details for configuring flashed tasmoto:
+
 |GPIO |Component|
 |-------|---------|
 |GPIO00 | 	None  |
