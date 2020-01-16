@@ -31,6 +31,7 @@ Used Tuya-Convert to add Tasmota
 - https://templates.blakadder.com/deltaco_SH-LE27W.html
 - https://github.com/arendst/Tasmota/wiki/Mirabella-Genio-Bulb
 - https://github.com/ct-Open-Source/tuya-convert#procedure
+- https://www.magnus.tech/reflashing-deltaco-smarthome-sh-p01-with-tasmota/
 
 ## Amplifiers
 ## Onkyo TX-NR900E - Tested working
