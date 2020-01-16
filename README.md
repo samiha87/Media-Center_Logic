@@ -7,6 +7,7 @@ TODO is the issue with linking libraries?
 ## Smart bulbs
 ## Deltaco SH-LE27W - On progress
 
+Details for configuring flashed tasmoto
 |GPIO |Component|
 |-------|---------|
 |GPIO00 | 	None  |
@@ -26,8 +27,6 @@ TODO is the issue with linking libraries?
 |-------|---------|
 
 {"NAME":"SH-LE27W","GPIO":[0,0,0,0,0,140,0,0,38,0,37,142,141],"FLAG":0,"BASE":18}
-
-Used Tuya-Convert to add Tasmota
 
 ### reference 
 - https://templates.blakadder.com/deltaco_SH-LE27W.html
