@@ -10,23 +10,20 @@ TODO is the issue with linking libraries?
 |GPIO |Component|
 |-------|---------|
 |GPIO00 | 	None  |
-|-------|---------|
 |GPIO01 | 	None  |
+|GPIO02 |	  None  | 
+|GPIO03 |	  None  |
+|GPIO04 |	  None  |
+|GPIO05 |SM16716 CLK |
+|GPIO09 |	  None  |
+|GPIO10 |	  None  |
+|GPIO12 |	  PWM2  |
+|GPIO13 |	  None  |
+|GPIO14 |	  PWM1  |
+|GPIO15 |	SM16716 PWR |
+|GPIO16 |	SM16716 DAT |
+|FLAG 	|   None  |
 |-------|---------|
-
-GPIO02 	None
-GPIO03 	None
-GPIO04 	None
-GPIO05 	SM16716 CLK
-GPIO09 	None
-GPIO10 	None
-GPIO12 	PWM2
-GPIO13 	None
-GPIO14 	PWM1
-GPIO15 	SM16716 PWR
-GPIO16 	SM16716 DAT
-FLAG 	None
-
 {"NAME":"SH-LE27W","GPIO":[0,0,0,0,0,140,0,0,38,0,37,142,141],"FLAG":0,"BASE":18}
 
 Used Tuya-Convert to add Tasmota
