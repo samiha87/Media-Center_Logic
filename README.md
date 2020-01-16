@@ -8,8 +8,11 @@ TODO is the issue with linking libraries?
 ## Deltaco SH-LE27W - On progress
 
 GPIO #	Component
+
 GPIO00 	None
+
 GPIO01 	None
+
 GPIO02 	None
 GPIO03 	None
 GPIO04 	None
