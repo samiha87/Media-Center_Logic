@@ -24,6 +24,7 @@ TODO is the issue with linking libraries?
 |GPIO16 |	SM16716 DAT |
 |FLAG 	|   None  |
 |-------|---------|
+
 {"NAME":"SH-LE27W","GPIO":[0,0,0,0,0,140,0,0,38,0,37,142,141],"FLAG":0,"BASE":18}
 
 Used Tuya-Convert to add Tasmota
