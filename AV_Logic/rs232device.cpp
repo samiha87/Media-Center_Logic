@@ -50,19 +50,19 @@ void RS232Device::readData()
 {
 
     const QByteArray msg = serial->readAll();
-    qDebug() << "RS232Device::readData() " << msg;
+    //qDebug() << "RS232Device::readData() " << msg;
     emit received(msg);
 }
 
 void RS232Device::sendToDevice(const QByteArray &msg)
 {
-    qDebug() << "RS232Device::sendToDevice() " << msg;
+    //qDebug() << "RS232Device::sendToDevice() " << msg;
     serial->write(msg);
 }
 
 bool RS232Device::openPort()
 {
-    qDebug() << "RS232Device::openPort() ";
+    //qDebug() << "RS232Device::openPort() ";
     connected = false;
     serial->setPortName(portName);
     serial->setBaudRate(baudrate);

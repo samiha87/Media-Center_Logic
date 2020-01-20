@@ -31,11 +31,14 @@ signals:
 private:
     RS232Device serial;
     QTimer timer;
+    QByteArray receiveBuffer;
     bool devicePower = false;
     bool deviceMute = false;
+    int deviceVolume;
 
     int requestStatusPoll = 0;
     QByteArray generateCommand(QByteArray cmd, QByteArray parameter);
+    void parseMessage(QByteArray data);
 private slots:
     void fromDevice(QByteArray msg);
     void requestStatus();

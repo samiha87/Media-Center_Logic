@@ -18,6 +18,7 @@ Onkyo_AMP_RS232::Onkyo_AMP_RS232(QObject *parent) : QObject(parent)
     QObject::connect(&serial, SIGNAL(received(QByteArray)), this, SLOT(fromDevice(QByteArray)));
 
     timer.start(3000);
+    receiveBuffer.clear();
 }
 
 void Onkyo_AMP_RS232::setName(QString name)
@@ -107,10 +108,42 @@ QByteArray Onkyo_AMP_RS232::generateCommand(QByteArray cmd, QByteArray parameter
     return message;
 }
 
+void Onkyo_AMP_RS232::parseMessage(QByteArray data)
+{
+    //qDebug() << "Onkyo_AMP_RS232::parseMessage() " << data;
+    if(data.contains("!1")) data.remove(0, (data.indexOf("!1") + 2) );
+    if(data.contains(0x1A)) data.remove(data.indexOf(0x1A), data.length());
+    //qDebug() << "Onkyo_AMP_RS232::parseMessage() Cleaned " << data;
+    if(data.contains("PWR")) {  // Power
+        data.remove(0, (data.indexOf("PWR") + 3) );
+        if(data == "00") devicePower = false;
+        if(data == "01") devicePower = true;
+        //qDebug() << "Onkyo_AMP_RS232::parseMessage() Power is " << data << " " << QString::number(devicePower);
+    } else if (data.contains("MVL")) {  // Master volume
+        data.remove(0, (data.indexOf("MVL") + 3) );
+        bool temp;
+        deviceVolume = data.toInt(&temp, 16);
+        //qDebug() << "Onkyo_AMP_RS232::parseMessage() Volume is " << data << " " << QString::number(deviceVolume);
+        // Convert from hex to decimal
+    } else if (data.contains("AMT")) {  // Audio mute
+        data.remove(0, (data.indexOf("AMT") + 3) );
+        if(data == "00") deviceMute = false;
+        if(data == "01") deviceMute = true;
+    } else if (data.contains("SLI")) {  // Input
+        data.remove(0, (data.indexOf("SLI") + 3) );
+    }
+}
+
 void Onkyo_AMP_RS232::fromDevice(QByteArray msg)
 {
     // Parse message
-    qDebug() << "Onkyo_AMP_RS232::fromDevice() " << msg;
+    // Read until 0x1A found;
+    receiveBuffer.append(msg);
+    if(receiveBuffer.contains(0x1A)) {
+        qDebug() << "Onkyo_AMP_RS232::fromDevice() " << receiveBuffer;
+        parseMessage(receiveBuffer);
+        receiveBuffer.clear();
+    }
 }
 
 void Onkyo_AMP_RS232::requestStatus()
