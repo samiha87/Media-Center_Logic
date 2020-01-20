@@ -11,11 +11,13 @@ class AudioConfigurator : public QObject
 public:
     enum AudioControlTypes {
         eAudioIR,
-        eAudioLAN
+        eAudioLAN,
+        eAudioRS232
     };
 
     enum AudioDeviceTypes {
-        eAudioAmplifier,
+        eAudioAmplifierGeneric,
+        eAudioAmplifierOnkyo,
         eAudioTV,
         eAudioProjector,
         eAudioAmplifierMicrophones,

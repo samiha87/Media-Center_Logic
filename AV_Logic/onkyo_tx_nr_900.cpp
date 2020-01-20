@@ -11,7 +11,8 @@ Onkyo_AMP_RS232::Onkyo_AMP_RS232(QObject *parent) : QObject(parent)
     serial.setStop(QSerialPort::OneStop);
     serial.setParity(QSerialPort::NoParity);
     serial.setDataBits(QSerialPort::Data8);
-    serial.openPort();
+    bool status = serial.openPort();
+    qDebug() << "Onkyo_AMP_RS232::Onkyo_AMP_RS232() Open serial port() " << QString::number(status);
 
     QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(requestStatus()));
     QObject::connect(&serial, SIGNAL(received(QByteArray)), this, SLOT(fromDevice(QByteArray)));
@@ -114,6 +115,7 @@ void Onkyo_AMP_RS232::fromDevice(QByteArray msg)
 
 void Onkyo_AMP_RS232::requestStatus()
 {
+    qDebug() << "Onkyo_AMP_RS232::requestStatus()";
     switch (requestStatusPoll) {
     case 0:
         serial.send(generateCommand(POWER, QUERY));

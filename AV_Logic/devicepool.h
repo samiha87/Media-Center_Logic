@@ -40,7 +40,8 @@ public:
         eDriverPJLink,
         eDriverPanasonic,
         eDriverHitachi,
-        eDriverSony
+        eDriverSony,
+        eDriverOnkyo
     };
 
     explicit DevicePool(QObject *parent = nullptr);

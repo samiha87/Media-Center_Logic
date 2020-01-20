@@ -41,9 +41,11 @@ void DevicePool::createLanDevice(QString deviceName, deviceTypes dev, driverType
             break;
         case eDriverSony:
             break;
+        case eDriverOnkyo:
+            break;
         }
         aLogic = new AudioLogic();
-        aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifier, AudioConfigurator::eAudioIR, aLogic );
+        aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifierGeneric, AudioConfigurator::eAudioIR, aLogic );
         aDev->setName(deviceName);
         aLogic->setDevice(aDev);
         audioDevices.append(aLogic);
@@ -97,8 +99,33 @@ void DevicePool::createLanDevice(QString deviceName, deviceTypes dev, driverType
 }
 
 void DevicePool::createRS232Device(QString deviceName, deviceTypes dev, driverTypes driverType) {
+    AudioLogic *aLogic;
+    AudioDevice *aDev;
+    AudioConfigurator audioConfig;
+    aLogic = new AudioLogic();
+
     switch(dev) {
     case eAmplifier:
+        // Create audio device, <deviceName> <Device type> <Control type>
+        qDebug() << "DevicePool::createRS232Device() Amplifier";
+        switch (driverType) {
+            case eDriverPJLink:
+            break;
+        case eDriverPanasonic:
+            break;
+        case eDriverHitachi:
+            break;
+        case eDriverSony:
+            break;
+        case eDriverOnkyo:
+            qDebug() << "DevicePool::createRS232Device() Amplifier, Onkyo";
+            aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifierOnkyo, AudioConfigurator::eAudioRS232, aLogic);
+            break;
+        }
+
+        aDev->setName(deviceName);
+        aLogic->setDevice(aDev);
+        audioDevices.append(aLogic);
         break;
     case eDisplay:
         break;
@@ -119,7 +146,7 @@ void DevicePool::createIRDevice(QString deviceName, deviceTypes dev) {
         // Create audio device, <deviceName> <Device type> <Control type>
         qDebug() << "DevicePool::createIRDevice() Amplifier";
         aLogic = new AudioLogic();
-        aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifier, AudioConfigurator::eAudioIR, aLogic );
+        aDev = audioConfig.createAudioConfiguration(deviceName, AudioConfigurator::eAudioAmplifierGeneric, AudioConfigurator::eAudioIR, aLogic );
         aDev->setName(deviceName);
         aLogic->setDevice(aDev);
         audioDevices.append(aLogic);

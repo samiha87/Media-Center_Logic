@@ -71,7 +71,6 @@ def ThreadedTCPControlServer(host, port, icon_in, icom_out):
                 try:
                     conn.send("test")
                 except socket.error, e:
-
                     print("TCPServer, ThreadedTCPControlServer() Connection lost")
                     conn.close() # Close socket and exit while loop
                     # Wait until new connection is established

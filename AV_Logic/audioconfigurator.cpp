@@ -1,5 +1,6 @@
 #include "audioconfigurator.h"
-
+#include "rs232device.h"
+#include "onkyo_tx_nr_900.h"
 
 AudioConfigurator::AudioConfigurator(QObject *parent) : QObject(parent)
 {
@@ -27,12 +28,19 @@ void AudioConfigurator::setAuthorization(QString user, QString password) {
 
 AudioDevice *AudioConfigurator::createAudioConfiguration(QString deviceName, AudioDeviceTypes type, AudioControlTypes control, QObject *connectTo) {
     Amplifier *object;
+    Onkyo_AMP_RS232 *onkyo; // TODO figure out way to integrate wiht amplifier class
+
     switch (type) {
-    case (eAudioAmplifier):
+    case (eAudioAmplifierGeneric):
         object = new Amplifier();
         object->setName(deviceName);
         QObject::connect(object, SIGNAL(statusChanged(QByteArray)), connectTo, SLOT(statusChanged(QByteArray)));
         return configureAmplifier(object, control);  // Configure created amplifier and return it to device pool
+    case eAudioAmplifierOnkyo:
+        onkyo = new Onkyo_AMP_RS232();
+        onkyo->setName(deviceName);
+        QObject::connect(onkyo, SIGNAL(statusChanged(QByteArray)), connectTo, SLOT(statusChanged(QByteArray)));
+        return static_cast<AudioDevice *>(onkyo);
     case (eAudioTV):
         break;
     case (eAudioProjector):
@@ -62,6 +70,7 @@ void AudioConfigurator::setName(QString name) {
 
 AudioDevice *AudioConfigurator::configureAmplifier(Amplifier *amp, AudioControlTypes control) {
     IRDevice *irdev;
+    RS232Device *rs232;
     switch(control) {
     case eAudioIR:
         irdev = new IRDevice();
@@ -69,6 +78,8 @@ AudioDevice *AudioConfigurator::configureAmplifier(Amplifier *amp, AudioControlT
         amp->setIR(irdev);
         return static_cast<AudioDevice *>(amp);
     case eAudioLAN:
+        break;
+    case eAudioRS232:
         break;
     }
     return nullptr;

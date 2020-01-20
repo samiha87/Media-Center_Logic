@@ -1,13 +1,15 @@
 #include "rs232device.h"
+#include <QDebug>
 
 RS232Device::RS232Device(QObject *parent) : QObject(parent)
 {
+    serial = new QSerialPort();
     portName = "/dev/ttyUSB0";              // On raspberrypi default
     baudrate = QSerialPort::Baud9600;       // Baudrate 9600
     parityBits = QSerialPort::NoParity;     // None
     stopBits = QSerialPort::OneStop;        // Stop bits 1
 
-    QObject::connect(serial, SIGNAL(readyRead(QByteArray)), this, SLOT(readData(QByteArray)));
+    QObject::connect(serial, SIGNAL(readyRead()), this, SLOT(readData()));
 }
 
 void RS232Device::setPort(QString rsPort)
@@ -44,18 +46,23 @@ void RS232Device::send(QByteArray msg)
     sendToDevice(msg);
 }
 
-void RS232Device::readData(QByteArray msg)
+void RS232Device::readData()
 {
+
+    const QByteArray msg = serial->readAll();
+    qDebug() << "RS232Device::readData() " << msg;
     emit received(msg);
 }
 
 void RS232Device::sendToDevice(const QByteArray &msg)
 {
+    qDebug() << "RS232Device::sendToDevice() " << msg;
     serial->write(msg);
 }
 
 bool RS232Device::openPort()
 {
+    qDebug() << "RS232Device::openPort() ";
     connected = false;
     serial->setPortName(portName);
     serial->setBaudRate(baudrate);
@@ -64,7 +71,6 @@ bool RS232Device::openPort()
     serial->setStopBits(stopBits);
     serial->setFlowControl(flowControl);
     serial->open(QIODevice::ReadWrite);
-
     return serial->isOpen();
 }
 

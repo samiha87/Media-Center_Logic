@@ -20,7 +20,7 @@ public:
 
 public slots:
     void send(QByteArray msg);
-    void readData(QByteArray msg);
+    void readData();
 signals:
     void received(QByteArray msg);
 

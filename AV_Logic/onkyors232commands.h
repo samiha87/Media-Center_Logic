@@ -2,7 +2,7 @@
 #define ONKYORS232COMMANDS_H
 
 // Command defines
-#define startByte                                       '!'
+#define startByte                                       "!1"
 #define endByte                                         0x0D
 // Power
 #define POWER                                           "PWR"

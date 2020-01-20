@@ -10,12 +10,12 @@ Logic::Logic(QObject *parent) : QObject(parent)
     // Create audio device
     //devPool.createDevice("OSMC", devPool.InfraRed, devPool.eAmplifier);
     // Create audio device which links to alreade created projector
-    devPool.createDevice("Hitachi", devPool.Ethernet, devPool.eAudioViaProjector, devPool.eDriverHitachi);
+    devPool.createDevice("Onkyo", devPool.RS232, devPool.eAmplifier, devPool.eDriverOnkyo);
+    //devPool.createDevice("Hitachi", devPool.Ethernet, devPool.eAudioViaProjector, devPool.eDriverHitachi);
     // Create lights device
    // devPool.createDevice("Dummy", devPool.Ethernet, devPool.eLights);
 
     hwAdapter = new HardwareAdapter(this);
-
     volHandler = new VolumeHandler(this);
     shutdownTimer = new QTimer(this);
 

@@ -4,6 +4,7 @@
 #include <QObject>
 // Project includes
 #include "irdevice.h"
+#include "rs232device.h"
 #include "AudioDevice.h"
 
 class Amplifier : public QObject, public AudioDevice
@@ -24,6 +25,7 @@ public:
     void toggleMute() override;
 
     void setIR(IRDevice *ir);
+    void setRS232(RS232Device *rs232);
 signals:
     virtual void statusChanged(QByteArray msg) override;
 
